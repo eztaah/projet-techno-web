@@ -1,16 +1,15 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
-import { fetchBookById } from '../../services/bookService';
+import { useParams } from 'next/navigation';
+import { fetchBookById } from '../../../services/bookService';
 
 export default function BookDetail() {
-  const router = useRouter();
-  const { id } = router.query;
+  const { id } = useParams();
   const [book, setBook] = useState(null);
 
   useEffect(() => {
     if (id) {
-      fetchBookById(id as string).then(setBook);
+      fetchBookById(id).then(setBook).catch(console.error);
     }
   }, [id]);
 

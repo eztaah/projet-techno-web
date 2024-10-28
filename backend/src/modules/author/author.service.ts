@@ -19,4 +19,11 @@ export class AuthorService {
   async getAuthors() {
     return this.authorRepository.find();
   }
+
+  async getAuthorById(id: string) {
+    return this.authorRepository.findOne({
+      where: { id },
+      relations: ['books'],
+    });
+  }
 }

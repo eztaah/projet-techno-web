@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, NotFoundException } from '@nestjs/common';
 import { AuthorService } from './author.service';
 import { CreateAuthorDto } from './dto/create-author.dto';
 
@@ -14,5 +14,14 @@ export class AuthorController {
   @Get()
   findAll() {
     return this.authorService.getAuthors();
+  }
+
+  @Get(':id')
+  async findOne(@Param('id') id: string) {
+    const author = await this.authorService.getAuthorById(id);
+    if (!author) {
+      throw new NotFoundException('Author not found');
+    }
+    return author;
   }
 }

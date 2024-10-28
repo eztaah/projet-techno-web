@@ -31,4 +31,11 @@ export class BookService {
   async getBooks() {
     return this.bookRepository.find();
   }
+
+  async getBookById(id: string) {
+    return this.bookRepository.findOne({
+      where: { id },
+      relations: ['author'],
+    });
+  }
 }

@@ -1,16 +1,15 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
-import { fetchAuthorById } from '../../services/authorService';
+import { useParams } from 'next/navigation';
+import { fetchAuthorById } from '../../../services/authorService';
 
 export default function AuthorDetail() {
-  const router = useRouter();
-  const { id } = router.query;
+  const { id } = useParams();
   const [author, setAuthor] = useState(null);
 
   useEffect(() => {
     if (id) {
-      fetchAuthorById(id as string).then(setAuthor);
+      fetchAuthorById(id).then(setAuthor).catch(console.error);
     }
   }, [id]);
 
