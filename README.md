@@ -7,6 +7,7 @@ https://www.conventionalcommits.org/en/v1.0.0/
 ```shell
 # start 
 $ npm install 
+$ npm run populate-db
 $ npm run start:dev
 
 
