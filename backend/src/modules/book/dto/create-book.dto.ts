@@ -7,6 +7,6 @@ export class CreateBookDto {
   @IsInt()
   publicationYear: number;
 
-  @IsUUID()
+  @IsString()
   authorId: string;
 }

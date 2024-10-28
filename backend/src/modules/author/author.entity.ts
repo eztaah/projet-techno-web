@@ -1,9 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Entity, PrimaryColumn, Column, OneToMany, BeforeInsert } from 'typeorm';
 import { BookEntity } from '../book/book.entity';
 
 @Entity('authors')
 export class AuthorEntity {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn({ type: 'text' })
   id: string;
 
   @Column({ type: 'text' })
@@ -14,4 +14,10 @@ export class AuthorEntity {
 
   @OneToMany(() => BookEntity, (book) => book.author)
   books: BookEntity[];
+
+  @BeforeInsert()
+  setId() {
+    // Génère un ID sous la forme "prenom-nom", en remplaçant les espaces par des tirets et en mettant en minuscules
+    this.id = `${this.name.toLowerCase().replace(/\s+/g, '-')}`;
+  }
 }
