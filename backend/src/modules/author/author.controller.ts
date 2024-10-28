@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   Post,
+  Delete,
   Body,
   Param,
   NotFoundException,
@@ -30,5 +31,10 @@ export class AuthorController {
       throw new NotFoundException('Author not found');
     }
     return author;
+  }
+
+  @Delete(':id')
+  async delete(@Param('id') id: string) {
+    return this.authorService.deleteAuthor(id);
   }
 }

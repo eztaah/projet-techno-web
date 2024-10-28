@@ -27,7 +27,7 @@ export default function AuthorList() {
 
   const handleCreateAuthor = async (newAuthor) => {
     await createAuthor(newAuthor);
-    loadAuthors(); // Recharger la liste des auteurs après ajout
+    loadAuthors(); // reload author page after adding one
   };
 
   return (
