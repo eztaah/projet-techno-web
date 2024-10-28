@@ -19,6 +19,7 @@ export default function BookList() {
   const [books, setBooks] = useState<Book[]>([]);
   const [isModalOpen, setModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');  // state for search text
+  const [sortOption, setSortOption] = useState('title-asc');  // state for sorting option
 
   const loadBooks = async () => {
     const data = await fetchBooks();
@@ -34,10 +35,26 @@ export default function BookList() {
     loadBooks(); // reload book list after adding a new book
   };
 
-  // Filtrer les livres en fonction du texte de recherche
+  // filter books based on search text
   const filteredBooks = books.filter((book) =>
     book.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  // sort books based on the selected option
+  const sortedBooks = [...filteredBooks].sort((a, b) => {
+    switch (sortOption) {
+      case 'title-asc':
+        return a.title.localeCompare(b.title);
+      case 'title-desc':
+        return b.title.localeCompare(a.title);
+      case 'year-desc':
+        return b.publicationYear - a.publicationYear;
+      case 'year-asc':
+        return a.publicationYear - b.publicationYear;
+      default:
+        return 0;
+    }
+  });
 
   return (
     <div>
@@ -47,11 +64,23 @@ export default function BookList() {
       {/* search bar */}
       <input
         type="text"
-        placeholder="Search by title..."
+        placeholder="search by title..."
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
         className="mb-4 p-2 border rounded w-full"
       />
+
+      {/* sort dropdown */}
+      <select
+        value={sortOption}
+        onChange={(e) => setSortOption(e.target.value)}
+        className="mb-4 p-2 border rounded w-full"
+      >
+        <option value="title-asc">Title (A-Z)</option>
+        <option value="title-desc">Title (Z-A)</option>
+        <option value="year-desc">Publication Year (Newest)</option>
+        <option value="year-asc">Publication Year (Oldest)</option>
+      </select>
 
       <button
         onClick={() => setModalOpen(true)}
@@ -61,7 +90,7 @@ export default function BookList() {
       </button>
 
       <ul>
-        {filteredBooks.map((book) => (
+        {sortedBooks.map((book) => (
           <li key={book.id} className="bg-white p-4 rounded shadow mb-2">
             <Link href={`/books/${book.id}`} className="text-blue-500 hover:underline">
               {book.title}
