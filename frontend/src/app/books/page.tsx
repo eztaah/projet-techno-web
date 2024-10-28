@@ -18,6 +18,7 @@ interface Book {
 export default function BookList() {
   const [books, setBooks] = useState<Book[]>([]);
   const [isModalOpen, setModalOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');  // state for search text
 
   const loadBooks = async () => {
     const data = await fetchBooks();
@@ -30,21 +31,37 @@ export default function BookList() {
 
   const handleCreateBook = async (newBook) => {
     await createBook(newBook);
-    loadBooks(); // Recharger la liste des livres après ajout
+    loadBooks(); // reload book list after adding a new book
   };
+
+  // Filtrer les livres en fonction du texte de recherche
+  const filteredBooks = books.filter((book) =>
+    book.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div>
       <Breadcrumb />
       <h1 className="text-2xl font-bold mb-4">Books</h1>
+
+      {/* search bar */}
+      <input
+        type="text"
+        placeholder="Search by title..."
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        className="mb-4 p-2 border rounded w-full"
+      />
+
       <button
         onClick={() => setModalOpen(true)}
         className="mb-4 px-4 py-2 bg-green-500 text-white rounded"
       >
         Add New Book
       </button>
+
       <ul>
-        {books.map((book) => (
+        {filteredBooks.map((book) => (
           <li key={book.id} className="bg-white p-4 rounded shadow mb-2">
             <Link href={`/books/${book.id}`} className="text-blue-500 hover:underline">
               {book.title}
@@ -60,6 +77,7 @@ export default function BookList() {
           </li>
         ))}
       </ul>
+
       <CreateBookModal
         isOpen={isModalOpen}
         onClose={() => setModalOpen(false)}
