@@ -6,7 +6,11 @@ interface CreateAuthorModalProps {
   onSubmit: (author: { name: string; bio?: string }) => void;
 }
 
-export default function CreateAuthorModal({ isOpen, onClose, onSubmit }: CreateAuthorModalProps) {
+export default function CreateAuthorModal({
+  isOpen,
+  onClose,
+  onSubmit,
+}: CreateAuthorModalProps) {
   const [name, setName] = useState('');
   const [bio, setBio] = useState('');
 
@@ -43,8 +47,18 @@ export default function CreateAuthorModal({ isOpen, onClose, onSubmit }: CreateA
           />
         </div>
         <div className="flex justify-end">
-          <button onClick={onClose} className="px-4 py-2 mr-2 bg-gray-500 text-white rounded">Cancel</button>
-          <button onClick={handleSubmit} className="px-4 py-2 bg-blue-500 text-white rounded">Add Author</button>
+          <button
+            onClick={onClose}
+            className="px-4 py-2 mr-2 bg-gray-500 text-white rounded"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={handleSubmit}
+            className="px-4 py-2 bg-blue-500 text-white rounded"
+          >
+            Add Author
+          </button>
         </div>
       </div>
     </div>

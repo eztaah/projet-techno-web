@@ -5,13 +5,19 @@ export default function Navigation() {
     <nav className="bg-gray-800 p-4">
       <ul className="flex space-x-4">
         <li>
-          <Link href="/" className="text-white">Home</Link>
+          <Link href="/" className="text-white">
+            Home
+          </Link>
         </li>
         <li>
-          <Link href="/books" className="text-white">Books</Link>
+          <Link href="/books" className="text-white">
+            Books
+          </Link>
         </li>
         <li>
-          <Link href="/authors" className="text-white">Authors</Link>
+          <Link href="/authors" className="text-white">
+            Authors
+          </Link>
         </li>
       </ul>
     </nav>

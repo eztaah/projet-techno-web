@@ -1,4 +1,10 @@
-import { Entity, PrimaryColumn, Column, ManyToOne, BeforeInsert } from 'typeorm';
+import {
+  Entity,
+  PrimaryColumn,
+  Column,
+  ManyToOne,
+  BeforeInsert,
+} from 'typeorm';
 import { AuthorEntity } from '../author/author.entity';
 
 @Entity('books')

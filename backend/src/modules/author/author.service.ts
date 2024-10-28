@@ -8,7 +8,7 @@ import { CreateAuthorDto } from './dto/create-author.dto';
 export class AuthorService {
   constructor(
     @InjectRepository(AuthorEntity)
-    private readonly authorRepository: Repository<AuthorEntity>,
+    private readonly authorRepository: Repository<AuthorEntity>
   ) {}
 
   async createAuthor(createAuthorDto: CreateAuthorDto) {

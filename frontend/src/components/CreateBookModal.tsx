@@ -3,10 +3,18 @@ import { useState } from 'react';
 interface CreateBookModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (book: { title: string; publicationYear: number; authorId: string }) => void;
+  onSubmit: (book: {
+    title: string;
+    publicationYear: number;
+    authorId: string;
+  }) => void;
 }
 
-export default function CreateBookModal({ isOpen, onClose, onSubmit }: CreateBookModalProps) {
+export default function CreateBookModal({
+  isOpen,
+  onClose,
+  onSubmit,
+}: CreateBookModalProps) {
   const [title, setTitle] = useState('');
   const [publicationYear, setPublicationYear] = useState('');
   const [authorId, setAuthorId] = useState('');
@@ -14,7 +22,7 @@ export default function CreateBookModal({ isOpen, onClose, onSubmit }: CreateBoo
   const handleSubmit = () => {
     const publicationYearNumber = parseInt(publicationYear, 10);
     if (!title || !publicationYearNumber || !authorId) {
-      alert("Please fill in all fields.");
+      alert('Please fill in all fields.');
       return;
     }
     onSubmit({ title, publicationYear: publicationYearNumber, authorId });
@@ -55,8 +63,18 @@ export default function CreateBookModal({ isOpen, onClose, onSubmit }: CreateBoo
           />
         </div>
         <div className="flex justify-end">
-          <button onClick={onClose} className="px-4 py-2 mr-2 bg-gray-500 text-white rounded">Cancel</button>
-          <button onClick={handleSubmit} className="px-4 py-2 bg-blue-500 text-white rounded">Add Book</button>
+          <button
+            onClick={onClose}
+            className="px-4 py-2 mr-2 bg-gray-500 text-white rounded"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={handleSubmit}
+            className="px-4 py-2 bg-blue-500 text-white rounded"
+          >
+            Add Book
+          </button>
         </div>
       </div>
     </div>

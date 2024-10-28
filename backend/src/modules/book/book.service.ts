@@ -12,11 +12,13 @@ export class BookService {
     private readonly bookRepository: Repository<BookEntity>,
 
     @InjectRepository(AuthorEntity)
-    private readonly authorRepository: Repository<AuthorEntity>,
+    private readonly authorRepository: Repository<AuthorEntity>
   ) {}
 
   async createBook(createBookDto: CreateBookDto) {
-    const author = await this.authorRepository.findOne({ where: { id: createBookDto.authorId } });
+    const author = await this.authorRepository.findOne({
+      where: { id: createBookDto.authorId },
+    });
     if (!author) {
       throw new NotFoundException('Author not found');
     }

@@ -6,14 +6,16 @@ export const metadata = {
   description: 'Library management frontend built with Next.js',
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
       <body className="bg-gray-100">
         <Navigation />
-        <main className="container mx-auto p-4">
-          {children}
-        </main>
+        <main className="container mx-auto p-4">{children}</main>
       </body>
     </html>
   );
