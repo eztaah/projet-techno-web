@@ -18,8 +18,8 @@ interface Book {
 export default function BookList() {
   const [books, setBooks] = useState<Book[]>([]);
   const [isModalOpen, setModalOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');  // state for search text
-  const [sortOption, setSortOption] = useState('title-asc');  // state for sorting option
+  const [searchQuery, setSearchQuery] = useState(''); // state for search text
+  const [sortOption, setSortOption] = useState('title-asc'); // state for sorting option
 
   const loadBooks = async () => {
     const data = await fetchBooks();
@@ -92,14 +92,21 @@ export default function BookList() {
       <ul>
         {sortedBooks.map((book) => (
           <li key={book.id} className="bg-white p-4 rounded shadow mb-2">
-            <Link href={`/books/${book.id}`} className="text-blue-500 hover:underline">
+            <Link
+              href={`/books/${book.id}`}
+              className="text-blue-500 hover:underline"
+            >
               {book.title}
             </Link>
             <p className="text-gray-600">
               Publication Year: {book.publicationYear}
             </p>
             <p className="text-gray-600">
-              Author: <Link href={`/authors/${book.author.id}`} className="text-blue-500 hover:underline">
+              Author:{' '}
+              <Link
+                href={`/authors/${book.author.id}`}
+                className="text-blue-500 hover:underline"
+              >
                 {book.author.name}
               </Link>
             </p>

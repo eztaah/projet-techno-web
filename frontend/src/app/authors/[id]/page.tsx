@@ -1,7 +1,11 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { fetchAuthorById, updateAuthor, deleteAuthor } from '../../../services/authorService';
+import {
+  fetchAuthorById,
+  updateAuthor,
+  deleteAuthor,
+} from '../../../services/authorService';
 import { createBook, deleteBook } from '../../../services/bookService';
 import Breadcrumb from '../../../components/Breadcrumb';
 import EditAuthorModal from '../../../components/EditAuthorModal';
@@ -66,7 +70,11 @@ export default function AuthorDetail() {
       <Breadcrumb />
       <div className="flex items-center mb-4">
         {author.photo && (
-          <img src={author.photo} alt={author.name} className="w-32 h-32 rounded-full mr-4" />
+          <img
+            src={author.photo}
+            alt={author.name}
+            className="w-32 h-32 rounded-full mr-4"
+          />
         )}
         <div>
           <h1 className="text-2xl font-bold">{author.name}</h1>
@@ -101,8 +109,14 @@ export default function AuthorDetail() {
               <h2 className="text-xl font-bold mt-4">Books by this author:</h2>
               <ul>
                 {author.books.map((book) => (
-                  <li key={book.id} className="bg-gray-100 p-2 rounded mb-2 flex justify-between items-center">
-                    <Link href={`/books/${book.id}`} className="text-blue-500 hover:underline">
+                  <li
+                    key={book.id}
+                    className="bg-gray-100 p-2 rounded mb-2 flex justify-between items-center"
+                  >
+                    <Link
+                      href={`/books/${book.id}`}
+                      className="text-blue-500 hover:underline"
+                    >
                       {book.title} ({book.publicationYear})
                     </Link>
                     <button
@@ -116,9 +130,11 @@ export default function AuthorDetail() {
               </ul>
             </>
           ) : (
-            <p className="text-gray-500 mt-4">No books available for this author.</p>
+            <p className="text-gray-500 mt-4">
+              No books available for this author.
+            </p>
           )}
-          
+
           {/* Button to add a new book, only shown if author is not "Deleted author" */}
           <button
             onClick={() => setBookModalOpen(true)}
@@ -128,7 +144,9 @@ export default function AuthorDetail() {
           </button>
         </>
       ) : (
-        <p className="text-gray-500 mt-4">This author has been deleted and their books are reassigned.</p>
+        <p className="text-gray-500 mt-4">
+          This author has been deleted and their books are reassigned.
+        </p>
       )}
 
       {/* Modals for editing author, adding book, and confirming author deletion */}

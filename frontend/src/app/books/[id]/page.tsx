@@ -45,11 +45,15 @@ export default function BookDetail() {
       <p className="text-lg mb-2">Price: ${book.price}</p>
       <p className="text-lg mb-2">Publication Year: {book.publicationYear}</p>
       <p className="text-lg">
-        Author: <Link href={`/authors/${book.author.id}`} className="text-blue-500 hover:underline">
+        Author:{' '}
+        <Link
+          href={`/authors/${book.author.id}`}
+          className="text-blue-500 hover:underline"
+        >
           {book.author.name}
         </Link>
       </p>
-      
+
       <button
         onClick={() => setModalOpen(true)}
         className="mt-4 px-4 py-2 bg-red-500 text-white rounded"

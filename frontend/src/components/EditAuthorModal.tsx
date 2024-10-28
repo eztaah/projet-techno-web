@@ -3,7 +3,11 @@ import { useState } from 'react';
 interface EditAuthorModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (updatedData: { name: string; bio?: string; photo?: string }) => void;
+  onSubmit: (updatedData: {
+    name: string;
+    bio?: string;
+    photo?: string;
+  }) => void;
   author: {
     name: string;
     bio?: string;

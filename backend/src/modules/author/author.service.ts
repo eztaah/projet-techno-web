@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Not } from 'typeorm';
 import { AuthorEntity } from './author.entity';
@@ -13,7 +17,7 @@ export class AuthorService {
     private readonly authorRepository: Repository<AuthorEntity>,
 
     @InjectRepository(BookEntity)
-    private readonly bookRepository: Repository<BookEntity>,
+    private readonly bookRepository: Repository<BookEntity>
   ) {}
 
   async createAuthor(createAuthorDto: CreateAuthorDto) {
@@ -23,10 +27,10 @@ export class AuthorService {
 
   async getAuthors() {
     const authors = await this.authorRepository.find({
-      where: { name: Not("Deleted author") },
+      where: { name: Not('Deleted author') },
       relations: ['books'],
     });
-    
+
     return authors.map((author) => ({
       id: author.id,
       name: author.name,
@@ -67,7 +71,9 @@ export class AuthorService {
   }
 
   async getDeletedAuthor(): Promise<AuthorEntity> {
-    let deletedAuthor = await this.authorRepository.findOne({ where: { name: 'Deleted author' } });
+    let deletedAuthor = await this.authorRepository.findOne({
+      where: { name: 'Deleted author' },
+    });
 
     if (!deletedAuthor) {
       deletedAuthor = this.authorRepository.create({
@@ -104,12 +110,15 @@ export class AuthorService {
 
     await this.authorRepository.remove(author);
 
-    return { message: 'Author deleted successfully and books reassigned to "Deleted author".' };
+    return {
+      message:
+        'Author deleted successfully and books reassigned to "Deleted author".',
+    };
   }
 
   async updateAuthor(id: string, updateAuthorDto: UpdateAuthorDto) {
     const author = await this.authorRepository.findOne({ where: { id } });
-    
+
     if (!author) {
       throw new NotFoundException('Author not found');
     }

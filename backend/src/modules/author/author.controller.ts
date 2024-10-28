@@ -2,7 +2,7 @@ import {
   Controller,
   Get,
   Post,
-  Put, 
+  Put,
   Delete,
   Body,
   Param,
@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { AuthorService } from './author.service';
 import { CreateAuthorDto } from './dto/create-author.dto';
-import { UpdateAuthorDto } from './dto/update-author.dto';  
+import { UpdateAuthorDto } from './dto/update-author.dto';
 
 @Controller('authors')
 export class AuthorController {

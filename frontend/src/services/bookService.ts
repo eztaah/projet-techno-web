@@ -10,7 +10,11 @@ export async function fetchBookById(id: string) {
   return response.data;
 }
 
-export async function createBook(book: { title: string; publicationYear: number; authorId: string }) {
+export async function createBook(book: {
+  title: string;
+  publicationYear: number;
+  authorId: string;
+}) {
   const response = await api.post('/books', book);
   return response.data;
 }

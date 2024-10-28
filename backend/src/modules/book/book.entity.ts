@@ -19,7 +19,7 @@ export class BookEntity {
   publicationYear: number;
 
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
-  price: number; 
+  price: number;
 
   @ManyToOne(() => AuthorEntity, (author) => author.books, { eager: true })
   author: AuthorEntity;
