@@ -1,9 +1,10 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
-import { fetchBookById } from '../../../services/bookService';
+import { useRouter, useParams } from 'next/navigation';
+import { fetchBookById, deleteBook } from '../../../services/bookService';
 import Breadcrumb from '../../../components/Breadcrumb';
 import Link from 'next/link';
+import DeleteConfirmationModal from '../../../components/DeleteConfirmationModal';
 
 interface Author {
   id: string;
@@ -20,13 +21,20 @@ interface Book {
 
 export default function BookDetail() {
   const { id } = useParams();
+  const router = useRouter();
   const [book, setBook] = useState<Book | null>(null);
+  const [isModalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     if (id) {
       fetchBookById(id).then(setBook).catch(console.error);
     }
   }, [id]);
+
+  const handleDelete = async () => {
+    await deleteBook(id);
+    router.push('/books');
+  };
 
   if (!book) return <p>Loading...</p>;
 
@@ -41,6 +49,20 @@ export default function BookDetail() {
           {book.author.name}
         </Link>
       </p>
+      
+      <button
+        onClick={() => setModalOpen(true)}
+        className="mt-4 px-4 py-2 bg-red-500 text-white rounded"
+      >
+        Delete Book
+      </button>
+
+      <DeleteConfirmationModal
+        isOpen={isModalOpen}
+        onClose={() => setModalOpen(false)}
+        onConfirm={handleDelete}
+        message="Are you sure you want to delete this book? This action cannot be undone."
+      />
     </div>
   );
 }

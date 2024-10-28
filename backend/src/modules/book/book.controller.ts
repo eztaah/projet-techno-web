@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   Post,
+  Delete,
   Body,
   Param,
   NotFoundException,
@@ -30,5 +31,10 @@ export class BookController {
       throw new NotFoundException('Book not found');
     }
     return book;
+  }
+
+  @Delete(':id')
+  async delete(@Param('id') id: string) {
+    return this.bookService.deleteBook(id);
   }
 }

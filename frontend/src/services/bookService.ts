@@ -38,3 +38,8 @@ export async function createBook(book: {
   const response = await api.post('/books', book);
   return response.data;
 }
+
+export async function deleteBook(id: string) {
+  const response = await api.delete(`/books/${id}`);
+  return response.data;
+}

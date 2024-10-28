@@ -58,4 +58,12 @@ export class BookService {
       },
     };
   }
+
+  async deleteBook(id: string) {
+    const result = await this.bookRepository.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException(`Book with id "${id}" not found`);
+    }
+    return { message: 'Book deleted successfully' };
+  }
 }
