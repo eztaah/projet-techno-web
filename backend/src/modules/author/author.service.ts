@@ -17,13 +17,35 @@ export class AuthorService {
   }
 
   async getAuthors() {
-    return this.authorRepository.find();
+    const authors = await this.authorRepository.find({ relations: ['books'] });
+    return authors.map((author) => ({
+      id: author.id,
+      name: author.name,
+      photo: author.photo,
+      bookCount: author.books.length,
+    }));
   }
 
   async getAuthorById(id: string) {
-    return this.authorRepository.findOne({
+    const author = await this.authorRepository.findOne({
       where: { id },
       relations: ['books'],
     });
+
+    if (!author) {
+      return null;
+    }
+
+    return {
+      id: author.id,
+      name: author.name,
+      bio: author.bio,
+      photo: author.photo,
+      books: author.books.map((book) => ({
+        id: book.id,
+        title: book.title,
+        publicationYear: book.publicationYear,
+      })),
+    };
   }
 }

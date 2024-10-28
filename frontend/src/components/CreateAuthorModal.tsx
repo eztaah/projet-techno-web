@@ -3,7 +3,7 @@ import { useState } from 'react';
 interface CreateAuthorModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (author: { name: string; bio?: string }) => void;
+  onSubmit: (author: { name: string; bio?: string; photo?: string }) => void;
 }
 
 export default function CreateAuthorModal({
@@ -13,13 +13,14 @@ export default function CreateAuthorModal({
 }: CreateAuthorModalProps) {
   const [name, setName] = useState('');
   const [bio, setBio] = useState('');
+  const [photo, setPhoto] = useState('');
 
   const handleSubmit = () => {
     if (!name) {
       alert("Please enter the author's name.");
       return;
     }
-    onSubmit({ name, bio });
+    onSubmit({ name, bio, photo });
     onClose();
   };
 
@@ -43,6 +44,15 @@ export default function CreateAuthorModal({
           <textarea
             value={bio}
             onChange={(e) => setBio(e.target.value)}
+            className="w-full p-2 border rounded"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700">Photo URL</label>
+          <input
+            type="text"
+            value={photo}
+            onChange={(e) => setPhoto(e.target.value)}
             className="w-full p-2 border rounded"
           />
         </div>

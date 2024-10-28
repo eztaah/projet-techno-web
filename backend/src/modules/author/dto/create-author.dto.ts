@@ -7,4 +7,8 @@ export class CreateAuthorDto {
   @IsOptional()
   @IsString()
   bio?: string;
+
+  @IsOptional()
+  @IsString()
+  photo?: string;
 }

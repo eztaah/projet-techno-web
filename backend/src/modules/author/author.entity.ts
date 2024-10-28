@@ -18,12 +18,14 @@ export class AuthorEntity {
   @Column({ type: 'text', nullable: true })
   bio: string;
 
+  @Column({ type: 'text', nullable: true })
+  photo: string;
+
   @OneToMany(() => BookEntity, (book) => book.author)
   books: BookEntity[];
 
   @BeforeInsert()
   setId() {
-    // Génère un ID sous la forme "prenom-nom", en remplaçant les espaces par des tirets et en mettant en minuscules
     this.id = `${this.name.toLowerCase().replace(/\s+/g, '-')}`;
   }
 }
