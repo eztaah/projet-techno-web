@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Not } from 'typeorm';
 import { AuthorEntity } from './author.entity';
 import { CreateAuthorDto } from './dto/create-author.dto';
+import { UpdateAuthorDto } from './dto/update-author.dto';
 import { BookEntity } from '../book/book.entity';
 
 @Injectable()
@@ -104,5 +105,17 @@ export class AuthorService {
     await this.authorRepository.remove(author);
 
     return { message: 'Author deleted successfully and books reassigned to "Deleted author".' };
+  }
+
+  async updateAuthor(id: string, updateAuthorDto: UpdateAuthorDto) {
+    const author = await this.authorRepository.findOne({ where: { id } });
+    
+    if (!author) {
+      throw new NotFoundException('Author not found');
+    }
+
+    // Mise à jour des champs de l'auteur
+    Object.assign(author, updateAuthorDto);
+    return this.authorRepository.save(author);
   }
 }
