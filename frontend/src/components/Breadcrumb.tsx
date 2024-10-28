@@ -8,7 +8,8 @@ export default function Breadcrumb() {
   const breadcrumbs = pathSegments.map((segment, index) => {
     const href = '/' + pathSegments.slice(0, index + 1).join('/');
     const isLast = index === pathSegments.length - 1;
-    const formattedSegment = segment.charAt(0) + segment.slice(1);
+    const decodedSegment = decodeURIComponent(segment);
+    const formattedSegment = decodedSegment.charAt(0) + decodedSegment.slice(1);
 
     return (
       <li key={href} className="inline-flex items-center">
