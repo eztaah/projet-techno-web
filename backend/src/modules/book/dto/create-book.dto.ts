@@ -1,4 +1,4 @@
-import { IsString, IsInt, IsUUID } from 'class-validator';
+import { IsString, IsInt, IsOptional, IsNumber } from 'class-validator';
 
 export class CreateBookDto {
   @IsString()
@@ -9,4 +9,8 @@ export class CreateBookDto {
 
   @IsString()
   authorId: string;
+
+  @IsOptional()
+  @IsNumber()
+  price?: number; 
 }

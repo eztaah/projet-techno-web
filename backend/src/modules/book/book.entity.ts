@@ -18,12 +18,14 @@ export class BookEntity {
   @Column({ type: 'int' })
   publicationYear: number;
 
+  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
+  price: number; 
+
   @ManyToOne(() => AuthorEntity, (author) => author.books, { eager: true })
   author: AuthorEntity;
 
   @BeforeInsert()
   setId() {
-    // Remplace les espaces par des tirets, et utilise le nom de l'auteur et le titre pour générer l'ID.
     this.id = `${this.title.toLowerCase().replace(/\s+/g, '-')}-by-${this.author.id.toLowerCase().replace(/\s+/g, '-')}`;
   }
 }

@@ -31,13 +31,31 @@ export class BookService {
   }
 
   async getBooks() {
-    return this.bookRepository.find();
+    return this.bookRepository.find({
+      relations: ['author'],
+      select: ['id', 'title', 'publicationYear', 'price'],
+    });
   }
 
   async getBookById(id: string) {
-    return this.bookRepository.findOne({
+    const book = await this.bookRepository.findOne({
       where: { id },
       relations: ['author'],
     });
+
+    if (!book) {
+      throw new NotFoundException('Book not found');
+    }
+
+    return {
+      id: book.id,
+      title: book.title,
+      price: book.price,
+      publicationYear: book.publicationYear,
+      author: {
+        id: book.author.id,
+        name: book.author.name,
+      },
+    };
   }
 }
