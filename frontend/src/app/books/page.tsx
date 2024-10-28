@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { fetchBooks, createBook } from '../../services/bookService';
 import CreateBookModal from '../../components/CreateBookModal';
+import Breadcrumb from '../../components/Breadcrumb';
 
 export default function BookList() {
   const [books, setBooks] = useState([]);
@@ -24,6 +25,7 @@ export default function BookList() {
 
   return (
     <div>
+      <Breadcrumb />
       <h1 className="text-2xl font-bold mb-4">Books</h1>
       <button
         onClick={() => setModalOpen(true)}

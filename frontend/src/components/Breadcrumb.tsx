@@ -1,26 +1,32 @@
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
-interface BreadcrumbProps {
-  paths: { label: string; href?: string }[];
-}
+export default function Breadcrumb() {
+  const pathname = usePathname();
+  const pathSegments = pathname.split('/').filter(Boolean);
 
-export default function Breadcrumb({ paths }: BreadcrumbProps) {
+  const breadcrumbs = pathSegments.map((segment, index) => {
+    const href = '/' + pathSegments.slice(0, index + 1).join('/');
+    const isLast = index === pathSegments.length - 1;
+    const formattedSegment = segment.charAt(0) + segment.slice(1);
+
+    return (
+      <li key={href} className="inline-flex items-center">
+        {!isLast ? (
+          <Link href={href} className="text-blue-500 hover:underline">
+            {formattedSegment}
+          </Link>
+        ) : (
+          <span className="text-gray-500">{formattedSegment}</span>
+        )}
+        {!isLast && <span className="mx-2">/</span>}
+      </li>
+    );
+  });
+
   return (
     <nav aria-label="breadcrumb">
-      <ol className="breadcrumb flex space-x-2 text-gray-500">
-        {paths.map((path, index) => (
-          <li key={index}>
-            {path.href ? (
-              <Link href={path.href} className="hover:underline">
-                {path.label}
-              </Link>
-            ) : (
-              path.label
-            )}
-            {index < paths.length - 1 && <span className="mx-2">/</span>}
-          </li>
-        ))}
-      </ol>
+      <ol className="flex text-sm text-gray-600">{breadcrumbs}</ol>
     </nav>
   );
 }

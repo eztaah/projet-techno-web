@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { fetchAuthors, createAuthor } from '../../services/authorService';
 import CreateAuthorModal from '../../components/CreateAuthorModal';
+import Breadcrumb from '../../components/Breadcrumb';
 
 export default function AuthorList() {
   const [authors, setAuthors] = useState([]);
@@ -19,11 +20,12 @@ export default function AuthorList() {
 
   const handleCreateAuthor = async (newAuthor) => {
     await createAuthor(newAuthor);
-    loadAuthors(); // Recharger la liste des auteurs après ajout
+    loadAuthors();
   };
 
   return (
     <div>
+      <Breadcrumb />
       <h1 className="text-2xl font-bold mb-4">Authors</h1>
       <button
         onClick={() => setModalOpen(true)}

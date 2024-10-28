@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { fetchBookById } from '../../../services/bookService';
+import Breadcrumb from '../../../components/Breadcrumb';
 
 export default function BookDetail() {
   const { id } = useParams();
@@ -17,6 +18,7 @@ export default function BookDetail() {
 
   return (
     <div>
+      <Breadcrumb />
       <h1 className="text-2xl font-bold mb-4">{book.title}</h1>
       <p>Author: {book.author.name}</p>
       <p>Publication Year: {book.publicationYear}</p>
