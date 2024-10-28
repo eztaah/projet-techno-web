@@ -10,7 +10,7 @@ export default function AuthorDetail() {
 
   useEffect(() => {
     if (id) {
-      fetchAuthorById(id).then(setAuthor);
+      fetchAuthorById(id as string).then(setAuthor);
     }
   }, [id]);
 
@@ -20,6 +20,14 @@ export default function AuthorDetail() {
     <div>
       <h1 className="text-2xl font-bold mb-4">{author.name}</h1>
       <p>{author.bio}</p>
+      <h2 className="text-xl font-bold mt-4">Books by this author:</h2>
+      <ul>
+        {author.books.map((book) => (
+          <li key={book.id} className="bg-gray-100 p-2 rounded mb-2">
+            {book.title} ({book.publicationYear})
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

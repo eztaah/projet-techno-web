@@ -1,17 +1,13 @@
 'use client';
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { fetchAuthors } from '../../services/authorService';
 
 export default function AuthorList() {
   const [authors, setAuthors] = useState([]);
 
   useEffect(() => {
-    fetchAuthors()
-      .then((data) => setAuthors(Array.isArray(data) ? data : [])) 
-      .catch((error) => {
-        console.error("Failed to fetch authors:", error);
-        setAuthors([]); 
-      });
+    fetchAuthors().then((data) => setAuthors(Array.isArray(data) ? data : []));
   }, []);
 
   return (
@@ -20,7 +16,9 @@ export default function AuthorList() {
       <ul>
         {authors.map((author) => (
           <li key={author.id} className="bg-white p-4 rounded shadow mb-2">
-            {author.name}
+            <Link href={`/authors/${author.id}`} className="text-blue-500 hover:underline">
+              {author.name}
+            </Link>
           </li>
         ))}
       </ul>

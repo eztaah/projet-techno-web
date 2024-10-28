@@ -10,7 +10,7 @@ export default function BookDetail() {
 
   useEffect(() => {
     if (id) {
-      fetchBookById(id).then(setBook);
+      fetchBookById(id as string).then(setBook);
     }
   }, [id]);
 

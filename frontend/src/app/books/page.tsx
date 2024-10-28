@@ -1,17 +1,13 @@
 'use client';
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { fetchBooks } from '../../services/bookService';
 
 export default function BookList() {
   const [books, setBooks] = useState([]);
 
   useEffect(() => {
-    fetchBooks()
-      .then((data) => setBooks(Array.isArray(data) ? data : [])) 
-      .catch((error) => {
-        console.error("Failed to fetch books:", error);
-        setBooks([]); 
-      });
+    fetchBooks().then((data) => setBooks(Array.isArray(data) ? data : []));
   }, []);
 
   return (
@@ -20,7 +16,9 @@ export default function BookList() {
       <ul>
         {books.map((book) => (
           <li key={book.id} className="bg-white p-4 rounded shadow mb-2">
-            {book.title} by {book.author?.name}
+            <Link href={`/books/${book.id}`} className="text-blue-500 hover:underline">
+              {book.title} by {book.author.name}
+            </Link>
           </li>
         ))}
       </ul>
