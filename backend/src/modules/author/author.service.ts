@@ -3,128 +3,74 @@ import {
   NotFoundException,
   BadRequestException,
 } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Not } from 'typeorm';
-import { AuthorEntity } from './author.entity';
+import { AuthorRepository } from './author.repository';
 import { CreateAuthorDto } from './dto/create-author.dto';
 import { UpdateAuthorDto } from './dto/update-author.dto';
-import { BookEntity } from '../book/book.entity';
+import { AuthorPresenter } from './author.presenter';
 
 @Injectable()
 export class AuthorService {
-  constructor(
-    @InjectRepository(AuthorEntity)
-    private readonly authorRepository: Repository<AuthorEntity>,
-
-    @InjectRepository(BookEntity)
-    private readonly bookRepository: Repository<BookEntity>
-  ) {}
+  constructor(private readonly authorRepository: AuthorRepository) {}
 
   async createAuthor(createAuthorDto: CreateAuthorDto) {
     const author = this.authorRepository.create(createAuthorDto);
-    return this.authorRepository.save(author);
+    const savedAuthor = await this.authorRepository.saveAuthor(author);
+    return AuthorPresenter.fromEntity(savedAuthor);
   }
 
   async getAuthors() {
-    const authors = await this.authorRepository.find({
-      where: { name: Not('Deleted author') },
-      relations: ['books'],
-    });
-
-    return authors.map((author) => ({
-      id: author.id,
-      name: author.name,
-      photo: author.photo,
-      bookCount: author.books.length,
-    }));
+    const authors = await this.authorRepository.findAuthors();
+    return authors.map((author) => AuthorPresenter.fromEntity(author));
   }
 
   async getAuthorById(id: string) {
-    const author = await this.authorRepository.findOne({
-      where: { id },
-      relations: ['books'],
-    });
-
+    const author = await this.authorRepository.findAuthorById(id);
     if (!author) {
       return null;
     }
-
-    if (author.name === 'Deleted author') {
-      return {
-        id: author.id,
-        name: author.name,
-        bio: author.bio,
-      };
-    }
-
-    return {
-      id: author.id,
-      name: author.name,
-      bio: author.bio,
-      photo: author.photo,
-      books: author.books.map((book) => ({
-        id: book.id,
-        title: book.title,
-        publicationYear: book.publicationYear,
-      })),
-    };
+    return AuthorPresenter.fromEntity(author);
   }
 
-  async getDeletedAuthor(): Promise<AuthorEntity> {
-    let deletedAuthor = await this.authorRepository.findOne({
-      where: { name: 'Deleted author' },
-    });
-
+  async getDeletedAuthor() {
+    let deletedAuthor = await this.authorRepository.findDeletedAuthor();
     if (!deletedAuthor) {
       deletedAuthor = this.authorRepository.create({
         id: 'deleted-author',
         name: 'Deleted author',
         bio: 'This author has been deleted.',
       });
-      await this.authorRepository.save(deletedAuthor);
+      await this.authorRepository.saveAuthor(deletedAuthor);
     }
-
     return deletedAuthor;
   }
 
   async deleteAuthor(id: string) {
-    const author = await this.authorRepository.findOne({
-      where: { id },
-      relations: ['books'],
-    });
-
+    const author = await this.authorRepository.findAuthorById(id);
     if (!author) {
       throw new NotFoundException('Author not found');
     }
-
     if (author.name === 'Deleted author') {
       throw new BadRequestException('Cannot delete the "Deleted author".');
     }
-
     const deletedAuthor = await this.getDeletedAuthor();
-
     for (const book of author.books) {
       book.author = deletedAuthor;
-      await this.bookRepository.save(book);
+      await this.authorRepository.saveBook(book);
     }
-
-    await this.authorRepository.remove(author);
+    await this.authorRepository.deleteAuthor(author);
 
     return {
-      message:
-        'Author deleted successfully and books reassigned to "Deleted author".',
+      message: 'Author deleted successfully and books reassigned to "Deleted author".',
     };
   }
 
   async updateAuthor(id: string, updateAuthorDto: UpdateAuthorDto) {
-    const author = await this.authorRepository.findOne({ where: { id } });
-
+    const author = await this.authorRepository.findAuthorById(id);
     if (!author) {
       throw new NotFoundException('Author not found');
     }
-
-    // Mise à jour des champs de l'auteur
     Object.assign(author, updateAuthorDto);
-    return this.authorRepository.save(author);
+    const updatedAuthor = await this.authorRepository.saveAuthor(author);
+    return AuthorPresenter.fromEntity(updatedAuthor);
   }
 }
