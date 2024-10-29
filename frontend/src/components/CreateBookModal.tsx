@@ -1,4 +1,7 @@
-import { useState } from 'react';
+// components/CreateBookModal.tsx
+
+"use client";
+import { useState, useEffect } from 'react';
 
 interface CreateBookModalProps {
   isOpen: boolean;
@@ -7,7 +10,7 @@ interface CreateBookModalProps {
     title: string;
     publicationYear: number;
     authorId: string;
-    price?: number; // Ajout du champ price optionnel
+    price?: number;
   }) => void;
 }
 
@@ -19,7 +22,17 @@ export default function CreateBookModal({
   const [title, setTitle] = useState('');
   const [publicationYear, setPublicationYear] = useState('');
   const [authorId, setAuthorId] = useState('');
-  const [price, setPrice] = useState(''); // Nouvel état pour le prix
+  const [price, setPrice] = useState('');
+
+  // Reset fields when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      setTitle('');
+      setPublicationYear('');
+      setAuthorId('');
+      setPrice('');
+    }
+  }, [isOpen]);
 
   const handleSubmit = () => {
     const publicationYearNumber = parseInt(publicationYear, 10);
@@ -47,43 +60,62 @@ export default function CreateBookModal({
       <div className="bg-white p-6 rounded shadow-lg w-1/2">
         <h2 className="text-xl font-bold mb-4">Add New Book</h2>
 
+        {/* Title Field */}
         <div className="mb-4">
-          <label className="block text-gray-700">Title</label>
+          <label className="block text-gray-700">
+            Title <span className="text-red-500">*</span>
+          </label>
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+            placeholder="e.g., Harry Potter and the Philosopher's Stone"
+            required
             className="w-full p-2 border rounded"
           />
         </div>
 
+        {/* Publication Year Field */}
         <div className="mb-4">
-          <label className="block text-gray-700">Publication Year</label>
+          <label className="block text-gray-700">
+            Publication Year <span className="text-red-500">*</span>
+          </label>
           <input
             type="number"
             value={publicationYear}
             onChange={(e) => setPublicationYear(e.target.value)}
+            placeholder="e.g., 1997"
+            required
             className="w-full p-2 border rounded"
           />
         </div>
 
+        {/* Author ID Field */}
         <div className="mb-4">
-          <label className="block text-gray-700">Author ID</label>
+          <label className="block text-gray-700">
+            Author ID <span className="text-red-500">*</span>
+          </label>
           <input
             type="text"
             value={authorId}
             onChange={(e) => setAuthorId(e.target.value)}
+            placeholder="Author's unique ID"
+            required
             className="w-full p-2 border rounded"
           />
         </div>
 
+        {/* Price Field (Optional) */}
         <div className="mb-4">
-          <label className="block text-gray-700">Price</label>
+          <label className="block text-gray-700">
+            Price <span className="text-gray-500">(optional)</span>
+          </label>
           <input
             type="number"
             step="0.01"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
+            placeholder="e.g., 19.99"
             className="w-full p-2 border rounded"
           />
         </div>

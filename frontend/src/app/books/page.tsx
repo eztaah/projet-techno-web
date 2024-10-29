@@ -5,23 +5,29 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useBookProvider } from '../../providers/useBookProvider';
 import Button from '../../components/Button';
-import Modal from '../../components/Modal';
+import Breadcrumb from '../../components/Breadcrumb';
+import CreateBookModal from '../../components/CreateBookModal';
 
 export default function BookList() {
   const { books, isModalOpen, setModalOpen, addBook } = useBookProvider();
   const [searchQuery, setSearchQuery] = useState('');
 
-  const handleCreateBook = (title: string, authorId: string, year: number) => {
-    addBook({
-      title,
-      author: { id: authorId, name: '' },
-      publicationYear: year,
-    });
-    setModalOpen(false);
+  // Ajout d’un log pour vérifier l'état de isModalOpen
+  console.log("Modal Open Status:", isModalOpen);
+
+  const handleCreateBook = (bookData: {
+    title: string;
+    publicationYear: number;
+    authorId: string;
+    price?: number;
+  }) => {
+    addBook(bookData);
+    setModalOpen(false); 
   };
 
   return (
     <div>
+      <Breadcrumb />
       <h1 className="text-2xl font-bold mb-4">Books</h1>
       <input
         type="text"
@@ -30,10 +36,9 @@ export default function BookList() {
         onChange={(e) => setSearchQuery(e.target.value)}
         className="mb-4 p-2 border rounded w-full"
       />
-      <Button
-        onClick={() => setModalOpen(true)}
-        className="bg-green-500 text-white"
-      >
+
+      {/* Bouton pour ouvrir la modale */}
+      <Button onClick={() => setModalOpen(true)} className="bg-green-500 text-white mb-4">
         Add New Book
       </Button>
 
@@ -44,27 +49,21 @@ export default function BookList() {
           )
           .map((book) => (
             <li key={book.id} className="bg-white p-4 rounded shadow mb-2">
-              <Link
-                href={`/books/${book.id}`}
-                className="text-blue-500 hover:underline"
-              >
+              <Link href={`/books/${book.id}`} className="text-blue-500 hover:underline">
                 {book.title}
               </Link>
-              <p className="text-gray-600">
-                Publication Year: {book.publicationYear}
-              </p>
+              <p className="text-gray-600">Publication Year: {book.publicationYear}</p>
               <p className="text-gray-600">Author: {book.author.name}</p>
             </li>
           ))}
       </ul>
 
-      <Modal
+      {/* Modale pour ajouter un livre */}
+      <CreateBookModal
         isOpen={isModalOpen}
-        title="Add New Book"
         onClose={() => setModalOpen(false)}
-      >
-        {/* Form elements and logic for creating a book */}
-      </Modal>
+        onSubmit={handleCreateBook}
+      />
     </div>
   );
 }
