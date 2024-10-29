@@ -1,10 +1,13 @@
+// frontend/src/app/authors/page.tsx
+
 'use client';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useAuthorProvider } from '../../providers/useAuthorProvider';
 import CreateAuthorModal from '../../components/CreateAuthorModal';
 import Breadcrumb from '../../components/Breadcrumb';
-import Button from '../../components/Button'; // Ajout de l'import manquant
+import Button from '../../components/Button';
+import StarIcon from '@mui/icons-material/Star'; // Import Star Icon
 
 export default function AuthorList() {
   const { authors, isModalOpen, setModalOpen, addAuthor } = useAuthorProvider();
@@ -55,6 +58,24 @@ export default function AuthorList() {
                 {author.name}
               </Link>
               <p className="text-gray-600">Books written: {author.bookCount}</p>
+              {author.weightedAverageRating !== undefined &&
+              author.weightedAverageRating !== null ? (
+                <div className="flex items-center">
+                  <p className="text-gray-600 mr-2">Average Rating:</p>
+                  <div className="flex items-center">
+                    {[...Array(Math.round(author.weightedAverageRating))].map(
+                      (_, i) => (
+                        <StarIcon key={i} className="text-yellow-500" />
+                      )
+                    )}
+                    <p className="ml-1">
+                      ({author.weightedAverageRating.toFixed(1)})
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <p className="text-gray-500">No reviews yet</p>
+              )}
             </div>
           </li>
         ))}

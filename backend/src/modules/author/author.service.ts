@@ -19,7 +19,8 @@ export class AuthorService {
   }
 
   async getAuthors() {
-    const authors = await this.authorRepository.findAuthors();
+    const authors =
+      await this.authorRepository.findAuthorsWithWeightedRatings();
     return authors.map((author) => AuthorPresenter.fromEntity(author));
   }
 
@@ -60,7 +61,8 @@ export class AuthorService {
     await this.authorRepository.deleteAuthor(author);
 
     return {
-      message: 'Author deleted successfully and books reassigned to "Deleted author".',
+      message:
+        'Author deleted successfully and books reassigned to "Deleted author".',
     };
   }
 

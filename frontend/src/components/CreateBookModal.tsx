@@ -1,6 +1,6 @@
 // components/CreateBookModal.tsx
 
-"use client";
+'use client';
 import { useState, useEffect } from 'react';
 
 interface CreateBookModalProps {

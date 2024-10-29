@@ -6,7 +6,8 @@ export class BookPresenter {
     public title: string,
     public publicationYear: number,
     public price?: number,
-    public author?: { id: string; name: string }
+    public author?: { id: string; name: string },
+    public averageRating?: number
   ) {}
 
   static fromEntity(book: BookEntity): BookPresenter {
@@ -15,7 +16,8 @@ export class BookPresenter {
       book.title,
       book.publicationYear,
       book.price,
-      book.author ? { id: book.author.id, name: book.author.name } : undefined
+      book.author ? { id: book.author.id, name: book.author.name } : undefined,
+      book['averageRating']
     );
   }
 }

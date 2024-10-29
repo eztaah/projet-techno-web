@@ -4,4 +4,5 @@ export interface Author {
   bio?: string;
   photo?: string;
   bookCount: number;
+  weightedAverageRating?: number;
 }

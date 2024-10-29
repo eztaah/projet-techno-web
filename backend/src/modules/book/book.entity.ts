@@ -6,6 +6,8 @@ import {
   BeforeInsert,
 } from 'typeorm';
 import { AuthorEntity } from '../author/author.entity';
+import { ReviewEntity } from '../review/review.entity';
+import { OneToMany } from 'typeorm';
 
 @Entity('books')
 export class BookEntity {
@@ -23,6 +25,9 @@ export class BookEntity {
 
   @ManyToOne(() => AuthorEntity, (author) => author.books, { eager: true })
   author: AuthorEntity;
+
+  @OneToMany(() => ReviewEntity, (review) => review.book)
+  reviews: ReviewEntity[];
 
   @BeforeInsert()
   setId() {

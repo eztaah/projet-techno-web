@@ -1,4 +1,4 @@
-// app/books/page.tsx
+// frontend/src/app/books/page.tsx
 
 'use client';
 import { useEffect, useState } from 'react';
@@ -7,13 +7,11 @@ import { useBookProvider } from '../../providers/useBookProvider';
 import Button from '../../components/Button';
 import Breadcrumb from '../../components/Breadcrumb';
 import CreateBookModal from '../../components/CreateBookModal';
+import StarIcon from '@mui/icons-material/Star'; // Import Star Icon
 
 export default function BookList() {
   const { books, isModalOpen, setModalOpen, addBook } = useBookProvider();
   const [searchQuery, setSearchQuery] = useState('');
-
-  // Ajout d’un log pour vérifier l'état de isModalOpen
-  console.log("Modal Open Status:", isModalOpen);
 
   const handleCreateBook = (bookData: {
     title: string;
@@ -22,7 +20,7 @@ export default function BookList() {
     price?: number;
   }) => {
     addBook(bookData);
-    setModalOpen(false); 
+    setModalOpen(false);
   };
 
   return (
@@ -37,8 +35,10 @@ export default function BookList() {
         className="mb-4 p-2 border rounded w-full"
       />
 
-      {/* Bouton pour ouvrir la modale */}
-      <Button onClick={() => setModalOpen(true)} className="bg-green-500 text-white mb-4">
+      <Button
+        onClick={() => setModalOpen(true)}
+        className="bg-green-500 text-white mb-4"
+      >
         Add New Book
       </Button>
 
@@ -49,16 +49,34 @@ export default function BookList() {
           )
           .map((book) => (
             <li key={book.id} className="bg-white p-4 rounded shadow mb-2">
-              <Link href={`/books/${book.id}`} className="text-blue-500 hover:underline">
+              <Link
+                href={`/books/${book.id}`}
+                className="text-blue-500 hover:underline"
+              >
                 {book.title}
               </Link>
-              <p className="text-gray-600">Publication Year: {book.publicationYear}</p>
+              <p className="text-gray-600">
+                Publication Year: {book.publicationYear}
+              </p>
               <p className="text-gray-600">Author: {book.author.name}</p>
+              {book.averageRating !== undefined &&
+              book.averageRating !== null ? (
+                <div className="flex items-center">
+                  <p className="text-gray-600 mr-2">Average Rating:</p>
+                  <div className="flex items-center">
+                    {[...Array(Math.round(book.averageRating))].map((_, i) => (
+                      <StarIcon key={i} className="text-yellow-500" />
+                    ))}
+                    <p className="ml-1">({book.averageRating.toFixed(1)})</p>
+                  </div>
+                </div>
+              ) : (
+                <p className="text-gray-500">No reviews yet</p>
+              )}
             </li>
           ))}
       </ul>
 
-      {/* Modale pour ajouter un livre */}
       <CreateBookModal
         isOpen={isModalOpen}
         onClose={() => setModalOpen(false)}

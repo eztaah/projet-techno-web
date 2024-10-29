@@ -8,11 +8,13 @@ export class BookService {
   constructor(private readonly bookRepository: BookRepository) {}
 
   async createBook(createBookDto: CreateBookDto) {
-    const author = await this.bookRepository.findAuthorById(createBookDto.authorId);
+    const author = await this.bookRepository.findAuthorById(
+      createBookDto.authorId
+    );
     if (!author) {
       throw new NotFoundException('Author not found');
     }
-    
+
     const book = this.bookRepository.create({
       title: createBookDto.title,
       publicationYear: createBookDto.publicationYear,
@@ -24,7 +26,7 @@ export class BookService {
   }
 
   async getBooks() {
-    const books = await this.bookRepository.findBooks();
+    const books = await this.bookRepository.findBooksWithRatings();
     return books.map((book) => BookPresenter.fromEntity(book));
   }
 
