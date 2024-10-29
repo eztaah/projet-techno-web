@@ -1,5 +1,3 @@
-// components/CreateAuthorModal.tsx
-
 import { useState } from 'react';
 
 interface CreateAuthorModalProps {
@@ -12,12 +10,12 @@ export default function CreateAuthorModal({
   isOpen,
   onClose,
   onSubmit,
-}: CreateAuthorModalProps) {
-  const [name, setName] = useState('');
-  const [bio, setBio] = useState('');
-  const [photo, setPhoto] = useState('');
+}: CreateAuthorModalProps): JSX.Element | null {
+  const [name, setName] = useState<string>('');
+  const [bio, setBio] = useState<string>('');
+  const [photo, setPhoto] = useState<string>('');
 
-  const handleSubmit = () => {
+  const handleSubmit = (): void => {
     if (!name) {
       alert("Please enter the author's name.");
       return;
@@ -33,7 +31,6 @@ export default function CreateAuthorModal({
       <div className="bg-white p-6 rounded shadow-lg w-1/2">
         <h2 className="text-xl font-bold mb-4">Add New Author</h2>
 
-        {/* Name Field (Required) */}
         <div className="mb-4">
           <label className="block text-gray-700">
             Name <span className="text-red-500">*</span>
@@ -48,7 +45,6 @@ export default function CreateAuthorModal({
           />
         </div>
 
-        {/* Bio Field (Optional) */}
         <div className="mb-4">
           <label className="block text-gray-700">
             Biography <span className="text-gray-500">(optional)</span>
@@ -61,7 +57,6 @@ export default function CreateAuthorModal({
           />
         </div>
 
-        {/* Photo Field (Optional) */}
         <div className="mb-4">
           <label className="block text-gray-700">
             Photo URL <span className="text-gray-500">(optional)</span>

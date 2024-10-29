@@ -20,12 +20,12 @@ export default function EditAuthorModal({
   onClose,
   onSubmit,
   author,
-}: EditAuthorModalProps) {
-  const [name, setName] = useState(author.name);
-  const [bio, setBio] = useState(author.bio || '');
-  const [photo, setPhoto] = useState(author.photo || '');
+}: EditAuthorModalProps): JSX.Element | null {
+  const [name, setName] = useState<string>(author.name);
+  const [bio, setBio] = useState<string>(author.bio || '');
+  const [photo, setPhoto] = useState<string>(author.photo || '');
 
-  const handleSubmit = () => {
+  const handleSubmit = (): void => {
     onSubmit({ name, bio, photo });
     onClose();
   };
@@ -37,7 +37,6 @@ export default function EditAuthorModal({
       <div className="bg-white p-6 rounded shadow-lg w-1/2">
         <h2 className="text-xl font-bold mb-4">Edit Author</h2>
 
-        {/* Name Field (Required) */}
         <div className="mb-4">
           <label className="block text-gray-700">
             Name <span className="text-red-500">*</span>
@@ -52,7 +51,6 @@ export default function EditAuthorModal({
           />
         </div>
 
-        {/* Biography Field (Optional) */}
         <div className="mb-4">
           <label className="block text-gray-700">
             Biography <span className="text-gray-500">(optional)</span>
@@ -65,7 +63,6 @@ export default function EditAuthorModal({
           />
         </div>
 
-        {/* Photo URL Field (Optional) */}
         <div className="mb-4">
           <label className="block text-gray-700">
             Photo URL <span className="text-gray-500">(optional)</span>

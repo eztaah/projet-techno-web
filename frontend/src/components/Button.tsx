@@ -7,7 +7,11 @@ interface ButtonProps {
   children: ReactNode;
 }
 
-const Button: FC<ButtonProps> = ({ onClick, className, children }) => (
+const Button: FC<ButtonProps> = ({
+  onClick,
+  className,
+  children,
+}): JSX.Element => (
   <button onClick={onClick} className={`px-4 py-2 rounded ${className}`}>
     {children}
   </button>

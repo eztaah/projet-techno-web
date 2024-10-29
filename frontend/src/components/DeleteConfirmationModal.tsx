@@ -1,5 +1,3 @@
-// components/DeleteConfirmationModal.tsx
-
 'use client';
 interface DeleteConfirmationModalProps {
   isOpen: boolean;
@@ -13,7 +11,7 @@ export default function DeleteConfirmationModal({
   onClose,
   onConfirm,
   message,
-}: DeleteConfirmationModalProps) {
+}: DeleteConfirmationModalProps): JSX.Element | null {
   if (!isOpen) return null;
 
   return (

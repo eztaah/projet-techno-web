@@ -1,5 +1,3 @@
-// frontend/src/components/ReviewForm.tsx
-
 import { useState } from 'react';
 import { createReview } from '../services/reviewService';
 import { Button, TextField, Rating } from '@mui/material';
@@ -12,11 +10,11 @@ interface ReviewFormProps {
 export default function ReviewForm({
   bookId,
   onReviewSubmit,
-}: ReviewFormProps) {
+}: ReviewFormProps): JSX.Element {
   const [rating, setRating] = useState<number | null>(null);
-  const [comment, setComment] = useState('');
+  const [comment, setComment] = useState<string>('');
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (): Promise<void> => {
     if (rating) {
       await createReview(bookId, { rating, comment });
       setRating(null);

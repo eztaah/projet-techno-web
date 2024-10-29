@@ -1,5 +1,3 @@
-// app/authors/[id]/page.tsx
-
 'use client';
 import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
@@ -8,7 +6,7 @@ import {
   updateAuthor,
   deleteAuthor,
 } from '../../../services/authorService';
-import { createBook, deleteBook } from '../../../services/bookService';
+import { createBook } from '../../../services/bookService';
 import Breadcrumb from '../../../components/Breadcrumb';
 import EditAuthorModal from '../../../components/EditAuthorModal';
 import CreateBookModal from '../../../components/CreateBookModal';
@@ -29,13 +27,13 @@ interface Author {
   books?: Book[];
 }
 
-export default function AuthorDetail() {
+export default function AuthorDetail(): JSX.Element {
   const { id } = useParams();
   const router = useRouter();
   const [author, setAuthor] = useState<Author | null>(null);
-  const [isEditModalOpen, setEditModalOpen] = useState(false);
-  const [isBookModalOpen, setBookModalOpen] = useState(false);
-  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [isEditModalOpen, setEditModalOpen] = useState<boolean>(false);
+  const [isBookModalOpen, setBookModalOpen] = useState<boolean>(false);
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
     if (id) {
@@ -43,29 +41,28 @@ export default function AuthorDetail() {
     }
   }, [id]);
 
-  // Ajout de la fonction handleUpdateAuthor pour gérer la mise à jour de l'auteur
   const handleUpdateAuthor = async (updatedData: {
     name: string;
     bio?: string;
     photo?: string;
-  }) => {
+  }): Promise<void> => {
     if (!author) return;
     await updateAuthor(author.id, updatedData);
-    fetchAuthorById(author.id).then(setAuthor); // recharge les données de l'auteur après la mise à jour
+    fetchAuthorById(author.id).then(setAuthor); // reload author data after update
   };
 
   const handleAddBook = async (newBook: {
     title: string;
     publicationYear: number;
-  }) => {
+  }): Promise<void> => {
     if (!author) return;
     await createBook({ ...newBook, authorId: author.id });
-    fetchAuthorById(author.id).then(setAuthor); // recharge les données de l'auteur pour afficher le nouveau livre
+    fetchAuthorById(author.id).then(setAuthor); // reload author data to display the new book
   };
 
-  const handleDeleteAuthor = async () => {
+  const handleDeleteAuthor = async (): Promise<void> => {
     await deleteAuthor(id);
-    router.push('/authors'); // redirige vers la liste des auteurs après la suppression
+    router.push('/authors'); // redirect to authors list after deletion
   };
 
   if (!author) return <p>Loading...</p>;

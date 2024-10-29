@@ -1,17 +1,15 @@
-// frontend/src/app/authors/page.tsx
-
 'use client';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { useAuthorProvider } from '../../providers/useAuthorProvider';
 import CreateAuthorModal from '../../components/CreateAuthorModal';
 import Breadcrumb from '../../components/Breadcrumb';
 import Button from '../../components/Button';
-import StarIcon from '@mui/icons-material/Star'; // Import Star Icon
+import StarIcon from '@mui/icons-material/Star';
 
-export default function AuthorList() {
+export default function AuthorList(): JSX.Element {
   const { authors, isModalOpen, setModalOpen, addAuthor } = useAuthorProvider();
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
   const filteredAuthors = authors.filter((author) =>
     author.name.toLowerCase().includes(searchQuery.toLowerCase())

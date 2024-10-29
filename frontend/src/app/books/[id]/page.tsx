@@ -1,17 +1,15 @@
-// frontend/src/app/books/[id]/page.tsx
-
 'use client';
 import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { fetchBookById, deleteBook } from '../../../services/bookService';
-import { fetchReviews, createReview } from '../../../services/reviewService'; // New services
+import { fetchReviews, createReview } from '../../../services/reviewService';
 import Breadcrumb from '../../../components/Breadcrumb';
 import Link from 'next/link';
 import DeleteConfirmationModal from '../../../components/DeleteConfirmationModal';
 import { Drawer, Button, IconButton } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 import CloseIcon from '@mui/icons-material/Close';
-import ReviewForm from '../../../components/ReviewForm'; // New component
+import ReviewForm from '../../../components/ReviewForm';
 
 interface Author {
   id: string;
@@ -33,14 +31,14 @@ interface Review {
   createdAt: string;
 }
 
-export default function BookDetail() {
+export default function BookDetail(): JSX.Element {
   const { id } = useParams();
   const router = useRouter();
   const [book, setBook] = useState<Book | null>(null);
   const [reviews, setReviews] = useState<Review[]>([]);
-  const [isDrawerOpen, setDrawerOpen] = useState(false);
-  const [isModalOpen, setModalOpen] = useState(false);
-  const [sortOrder, setSortOrder] = useState<'ASC' | 'DESC'>('ASC'); // Sorting order
+  const [isDrawerOpen, setDrawerOpen] = useState<boolean>(false);
+  const [isModalOpen, setModalOpen] = useState<boolean>(false);
+  const [sortOrder, setSortOrder] = useState<'ASC' | 'DESC'>('ASC');
 
   useEffect(() => {
     if (id) {
@@ -49,17 +47,17 @@ export default function BookDetail() {
     }
   }, [id, sortOrder]);
 
-  const loadReviews = async () => {
+  const loadReviews = async (): Promise<void> => {
     const fetchedReviews = await fetchReviews(id, sortOrder);
     setReviews(fetchedReviews);
   };
 
-  const handleDelete = async () => {
+  const handleDelete = async (): Promise<void> => {
     await deleteBook(id);
     router.push('/books');
   };
 
-  const toggleDrawer = () => setDrawerOpen(!isDrawerOpen);
+  const toggleDrawer = (): void => setDrawerOpen(!isDrawerOpen);
 
   if (!book) return <p>Loading...</p>;
 

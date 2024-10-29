@@ -1,6 +1,3 @@
-// components/CreateBookModal.tsx
-
-'use client';
 import { useState, useEffect } from 'react';
 
 interface CreateBookModalProps {
@@ -18,13 +15,12 @@ export default function CreateBookModal({
   isOpen,
   onClose,
   onSubmit,
-}: CreateBookModalProps) {
-  const [title, setTitle] = useState('');
-  const [publicationYear, setPublicationYear] = useState('');
-  const [authorId, setAuthorId] = useState('');
-  const [price, setPrice] = useState('');
+}: CreateBookModalProps): JSX.Element | null {
+  const [title, setTitle] = useState<string>('');
+  const [publicationYear, setPublicationYear] = useState<string>('');
+  const [authorId, setAuthorId] = useState<string>('');
+  const [price, setPrice] = useState<string>('');
 
-  // Reset fields when modal opens
   useEffect(() => {
     if (isOpen) {
       setTitle('');
@@ -34,7 +30,7 @@ export default function CreateBookModal({
     }
   }, [isOpen]);
 
-  const handleSubmit = () => {
+  const handleSubmit = (): void => {
     const publicationYearNumber = parseInt(publicationYear, 10);
     const priceNumber = parseFloat(price);
 
@@ -60,7 +56,6 @@ export default function CreateBookModal({
       <div className="bg-white p-6 rounded shadow-lg w-1/2">
         <h2 className="text-xl font-bold mb-4">Add New Book</h2>
 
-        {/* Title Field */}
         <div className="mb-4">
           <label className="block text-gray-700">
             Title <span className="text-red-500">*</span>
@@ -75,7 +70,6 @@ export default function CreateBookModal({
           />
         </div>
 
-        {/* Publication Year Field */}
         <div className="mb-4">
           <label className="block text-gray-700">
             Publication Year <span className="text-red-500">*</span>
@@ -90,7 +84,6 @@ export default function CreateBookModal({
           />
         </div>
 
-        {/* Author ID Field */}
         <div className="mb-4">
           <label className="block text-gray-700">
             Author ID <span className="text-red-500">*</span>
@@ -105,7 +98,6 @@ export default function CreateBookModal({
           />
         </div>
 
-        {/* Price Field (Optional) */}
         <div className="mb-4">
           <label className="block text-gray-700">
             Price <span className="text-gray-500">(optional)</span>

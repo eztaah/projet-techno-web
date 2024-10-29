@@ -1,24 +1,22 @@
-// frontend/src/app/books/page.tsx
-
 'use client';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { useBookProvider } from '../../providers/useBookProvider';
 import Button from '../../components/Button';
 import Breadcrumb from '../../components/Breadcrumb';
 import CreateBookModal from '../../components/CreateBookModal';
-import StarIcon from '@mui/icons-material/Star'; // Import Star Icon
+import StarIcon from '@mui/icons-material/Star';
 
-export default function BookList() {
+export default function BookList(): JSX.Element {
   const { books, isModalOpen, setModalOpen, addBook } = useBookProvider();
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
   const handleCreateBook = (bookData: {
     title: string;
     publicationYear: number;
     authorId: string;
     price?: number;
-  }) => {
+  }): void => {
     addBook(bookData);
     setModalOpen(false);
   };

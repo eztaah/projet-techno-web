@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import Button from './Button';
 
-export default function Navigation() {
+export default function Navigation(): JSX.Element {
   return (
     <nav className="bg-gray-800 p-4">
       <ul className="flex space-x-4">
