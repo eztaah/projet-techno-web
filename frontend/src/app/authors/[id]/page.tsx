@@ -1,3 +1,5 @@
+// app/authors/[id]/page.tsx
+
 'use client';
 import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
@@ -41,26 +43,29 @@ export default function AuthorDetail() {
     }
   }, [id]);
 
-  const handleUpdateAuthor = async (updatedData) => {
+  // Ajout de la fonction handleUpdateAuthor pour gérer la mise à jour de l'auteur
+  const handleUpdateAuthor = async (updatedData: {
+    name: string;
+    bio?: string;
+    photo?: string;
+  }) => {
     if (!author) return;
     await updateAuthor(author.id, updatedData);
-    fetchAuthorById(author.id).then(setAuthor); // reload author data
+    fetchAuthorById(author.id).then(setAuthor); // recharge les données de l'auteur après la mise à jour
   };
 
-  const handleAddBook = async (newBook) => {
+  const handleAddBook = async (newBook: {
+    title: string;
+    publicationYear: number;
+  }) => {
     if (!author) return;
     await createBook({ ...newBook, authorId: author.id });
-    fetchAuthorById(author.id).then(setAuthor); // reload author data to show new book
-  };
-
-  const handleDeleteBook = async (bookId: string) => {
-    await deleteBook(bookId);
-    fetchAuthorById(id).then(setAuthor); // reload author data to remove deleted book
+    fetchAuthorById(author.id).then(setAuthor); // recharge les données de l'auteur pour afficher le nouveau livre
   };
 
   const handleDeleteAuthor = async () => {
     await deleteAuthor(id);
-    router.push('/authors'); // redirect to authors list after deletion
+    router.push('/authors'); // redirige vers la liste des auteurs après la suppression
   };
 
   if (!author) return <p>Loading...</p>;
@@ -80,7 +85,6 @@ export default function AuthorDetail() {
           <h1 className="text-2xl font-bold">{author.name}</h1>
           <p className="text-gray-600">{author.bio}</p>
 
-          {/* Conditionally display edit and delete buttons only if it's not "Deleted author" */}
           {author.name !== 'Deleted author' && (
             <>
               <button
@@ -100,10 +104,8 @@ export default function AuthorDetail() {
         </div>
       </div>
 
-      {/* Conditionally display books or message based on whether the author is "Deleted author" */}
       {author.name !== 'Deleted author' ? (
         <>
-          {/* Check if books array exists and has elements */}
           {author.books && author.books.length > 0 ? (
             <>
               <h2 className="text-xl font-bold mt-4">Books by this author:</h2>
@@ -135,7 +137,6 @@ export default function AuthorDetail() {
             </p>
           )}
 
-          {/* Button to add a new book, only shown if author is not "Deleted author" */}
           <button
             onClick={() => setBookModalOpen(true)}
             className="mb-4 px-4 py-2 bg-green-500 text-white rounded"
@@ -149,29 +150,24 @@ export default function AuthorDetail() {
         </p>
       )}
 
-      {/* Modals for editing author, adding book, and confirming author deletion */}
-      {author.name !== 'Deleted author' && (
-        <>
-          <EditAuthorModal
-            isOpen={isEditModalOpen}
-            onClose={() => setEditModalOpen(false)}
-            onSubmit={handleUpdateAuthor}
-            author={author}
-          />
+      <EditAuthorModal
+        isOpen={isEditModalOpen}
+        onClose={() => setEditModalOpen(false)}
+        onSubmit={handleUpdateAuthor}
+        author={author}
+      />
 
-          <CreateBookModal
-            isOpen={isBookModalOpen}
-            onClose={() => setBookModalOpen(false)}
-            onSubmit={handleAddBook}
-          />
-        </>
-      )}
+      <CreateBookModal
+        isOpen={isBookModalOpen}
+        onClose={() => setBookModalOpen(false)}
+        onSubmit={handleAddBook}
+      />
 
       <DeleteConfirmationModal
         isOpen={isDeleteModalOpen}
         onClose={() => setDeleteModalOpen(false)}
         onConfirm={handleDeleteAuthor}
-        message="Are you sure you want to delete this author? This action cannot be undone and their books will be reassigned to 'Deleted author'."
+        message="Are you sure you want to delete this author? This action cannot be undone."
       />
     </div>
   );

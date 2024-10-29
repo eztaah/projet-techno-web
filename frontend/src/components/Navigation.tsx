@@ -1,23 +1,34 @@
+'use client';
 import Link from 'next/link';
+import Button from './Button';
 
 export default function Navigation() {
   return (
     <nav className="bg-gray-800 p-4">
       <ul className="flex space-x-4">
         <li>
-          <Link href="/" className="text-white">
+          <Button
+            onClick={() => (window.location.href = '/')}
+            className="text-white"
+          >
             Home
-          </Link>
+          </Button>
         </li>
         <li>
-          <Link href="/books" className="text-white">
+          <Button
+            onClick={() => (window.location.href = '/books')}
+            className="text-white"
+          >
             Books
-          </Link>
+          </Button>
         </li>
         <li>
-          <Link href="/authors" className="text-white">
+          <Button
+            onClick={() => (window.location.href = '/authors')}
+            className="text-white"
+          >
             Authors
-          </Link>
+          </Button>
         </li>
       </ul>
     </nav>

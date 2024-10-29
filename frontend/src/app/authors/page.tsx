@@ -1,37 +1,15 @@
 'use client';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { fetchAuthors, createAuthor } from '../../services/authorService';
+import { useAuthorProvider } from '../../providers/useAuthorProvider';
 import CreateAuthorModal from '../../components/CreateAuthorModal';
 import Breadcrumb from '../../components/Breadcrumb';
-
-interface Author {
-  id: string;
-  name: string;
-  photo?: string;
-  bookCount: number;
-}
+import Button from '../../components/Button'; // Ajout de l'import manquant
 
 export default function AuthorList() {
-  const [authors, setAuthors] = useState<Author[]>([]);
-  const [isModalOpen, setModalOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState(''); // state for search text
+  const { authors, isModalOpen, setModalOpen, addAuthor } = useAuthorProvider();
+  const [searchQuery, setSearchQuery] = useState('');
 
-  const loadAuthors = async () => {
-    const data = await fetchAuthors();
-    setAuthors(data);
-  };
-
-  useEffect(() => {
-    loadAuthors();
-  }, []);
-
-  const handleCreateAuthor = async (newAuthor) => {
-    await createAuthor(newAuthor);
-    loadAuthors(); // reload author page after adding one
-  };
-
-  // filter authors based on search text
   const filteredAuthors = authors.filter((author) =>
     author.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -41,7 +19,6 @@ export default function AuthorList() {
       <Breadcrumb />
       <h1 className="text-2xl font-bold mb-4">Authors</h1>
 
-      {/* search bar */}
       <input
         type="text"
         placeholder="search by name..."
@@ -50,12 +27,12 @@ export default function AuthorList() {
         className="mb-4 p-2 border rounded w-full"
       />
 
-      <button
+      <Button
         onClick={() => setModalOpen(true)}
         className="mb-4 px-4 py-2 bg-green-500 text-white rounded"
       >
         Add New Author
-      </button>
+      </Button>
 
       <ul>
         {filteredAuthors.map((author) => (
@@ -86,7 +63,7 @@ export default function AuthorList() {
       <CreateAuthorModal
         isOpen={isModalOpen}
         onClose={() => setModalOpen(false)}
-        onSubmit={handleCreateAuthor}
+        onSubmit={addAuthor}
       />
     </div>
   );

@@ -1,3 +1,6 @@
+// components/DeleteConfirmationModal.tsx
+
+'use client';
 interface DeleteConfirmationModalProps {
   isOpen: boolean;
   onClose: () => void;
