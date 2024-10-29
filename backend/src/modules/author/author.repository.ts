@@ -18,7 +18,7 @@ export class AuthorRepository {
     private readonly reviewRepository: Repository<ReviewEntity>
   ) {}
 
-  async getWeightedAverageRatingForAuthor(
+  public async getWeightedAverageRatingForAuthor(
     authorId: string
   ): Promise<number | null> {
     const result = await this.reviewRepository
@@ -33,8 +33,8 @@ export class AuthorRepository {
       : null;
   }
 
-  async findAuthorsWithWeightedRatings() {
-    const authors = await this.authorRepository.find({
+  public async findAuthorsWithWeightedRatings(): Promise<AuthorEntity[]> {
+    const authors: AuthorEntity[] = await this.authorRepository.find({
       where: { name: Not('Deleted author') },
       relations: ['books'],
     });
@@ -45,40 +45,39 @@ export class AuthorRepository {
     return authors;
   }
 
-  async saveAuthor(author: AuthorEntity) {
+  public async saveAuthor(author: AuthorEntity): Promise<AuthorEntity> {
     return this.authorRepository.save(author);
   }
 
-  async findAuthors() {
+  public async findAuthors(): Promise<AuthorEntity[]> {
     return this.authorRepository.find({
       where: { name: Not('Deleted author') },
       relations: ['books'],
     });
   }
 
-  async findAuthorById(id: string) {
+  public async findAuthorById(id: string): Promise<AuthorEntity | null> {
     return this.authorRepository.findOne({
       where: { id },
       relations: ['books'],
     });
   }
 
-  async findDeletedAuthor() {
+  public async findDeletedAuthor(): Promise<AuthorEntity | null> {
     return this.authorRepository.findOne({
       where: { name: 'Deleted author' },
     });
   }
 
-  async deleteAuthor(author: AuthorEntity) {
+  public async deleteAuthor(author: AuthorEntity): Promise<AuthorEntity> {
     return this.authorRepository.remove(author);
   }
 
-  async saveBook(book: BookEntity) {
+  public async saveBook(book: BookEntity): Promise<BookEntity> {
     return this.bookRepository.save(book);
   }
 
-  // Ajout de la méthode `create` pour instancier un AuthorEntity
-  create(authorData: Partial<AuthorEntity>): AuthorEntity {
+  public create(authorData: Partial<AuthorEntity>): AuthorEntity {
     return this.authorRepository.create(authorData);
   }
 }

@@ -10,16 +10,18 @@ export class ReviewRepository {
     private readonly reviewRepository: Repository<ReviewEntity>
   ) {}
 
-  // Add this create method
-  create(reviewData: Partial<ReviewEntity>): ReviewEntity {
+  public create(reviewData: Partial<ReviewEntity>): ReviewEntity {
     return this.reviewRepository.create(reviewData);
   }
 
-  async saveReview(review: ReviewEntity) {
+  public async saveReview(review: ReviewEntity): Promise<ReviewEntity> {
     return this.reviewRepository.save(review);
   }
 
-  async findReviewsForBook(bookId: string, order: 'ASC' | 'DESC') {
+  public async findReviewsForBook(
+    bookId: string,
+    order: 'ASC' | 'DESC'
+  ): Promise<ReviewEntity[]> {
     return this.reviewRepository.find({
       where: { book: { id: bookId } },
       order: { createdAt: order },

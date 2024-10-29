@@ -10,22 +10,22 @@ import { BookEntity } from '../book/book.entity';
 @Entity('authors')
 export class AuthorEntity {
   @PrimaryColumn({ type: 'text' })
-  id: string;
+  public id: string;
 
   @Column({ type: 'text' })
-  name: string;
+  public name: string;
 
   @Column({ type: 'text', nullable: true })
-  bio: string;
+  public bio?: string;
 
   @Column({ type: 'text', nullable: true })
-  photo: string;
+  public photo?: string;
 
   @OneToMany(() => BookEntity, (book) => book.author)
-  books: BookEntity[];
+  public books: BookEntity[];
 
   @BeforeInsert()
-  setId() {
+  public setId(): void {
     this.id = `${this.name.toLowerCase().replace(/\s+/g, '-')}`;
   }
 }

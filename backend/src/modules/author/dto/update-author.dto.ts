@@ -3,13 +3,13 @@ import { IsOptional, IsString, IsUrl } from 'class-validator';
 export class UpdateAuthorDto {
   @IsOptional()
   @IsString()
-  name?: string;
+  public name?: string;
 
   @IsOptional()
   @IsString()
-  bio?: string;
+  public bio?: string;
 
   @IsOptional()
   @IsUrl()
-  photo?: string;
+  public photo?: string;
 }

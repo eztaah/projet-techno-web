@@ -1,4 +1,3 @@
-// backend/src/modules/review/review.entity.ts
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -11,17 +10,17 @@ import { BookEntity } from '../book/book.entity';
 @Entity('reviews')
 export class ReviewEntity {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  public id: string;
 
   @Column({ type: 'int', width: 1 })
-  rating: number; // 1-5 stars
+  public rating: number;
 
   @Column({ type: 'text', nullable: true })
-  comment: string;
+  public comment?: string;
 
   @CreateDateColumn()
-  createdAt: Date;
+  public createdAt: Date;
 
   @ManyToOne(() => BookEntity, (book) => book.reviews)
-  book: BookEntity;
+  public book: BookEntity;
 }

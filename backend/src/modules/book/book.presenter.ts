@@ -10,7 +10,7 @@ export class BookPresenter {
     public averageRating?: number
   ) {}
 
-  static fromEntity(book: BookEntity): BookPresenter {
+  public static fromEntity(book: BookEntity): BookPresenter {
     return new BookPresenter(
       book.id,
       book.title,

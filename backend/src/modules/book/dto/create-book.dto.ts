@@ -2,15 +2,15 @@ import { IsString, IsInt, IsOptional, IsNumber } from 'class-validator';
 
 export class CreateBookDto {
   @IsString()
-  title: string;
+  public title: string;
 
   @IsInt()
-  publicationYear: number;
+  public publicationYear: number;
 
   @IsString()
-  authorId: string;
+  public authorId: string;
 
   @IsOptional()
   @IsNumber()
-  price?: number;
+  public price?: number;
 }

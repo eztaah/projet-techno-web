@@ -7,33 +7,41 @@ import { AuthorRepository } from './author.repository';
 import { CreateAuthorDto } from './dto/create-author.dto';
 import { UpdateAuthorDto } from './dto/update-author.dto';
 import { AuthorPresenter } from './author.presenter';
+import { AuthorEntity } from './author.entity';
 
 @Injectable()
 export class AuthorService {
   constructor(private readonly authorRepository: AuthorRepository) {}
 
-  async createAuthor(createAuthorDto: CreateAuthorDto) {
-    const author = this.authorRepository.create(createAuthorDto);
-    const savedAuthor = await this.authorRepository.saveAuthor(author);
+  public async createAuthor(
+    createAuthorDto: CreateAuthorDto
+  ): Promise<AuthorPresenter> {
+    const author: AuthorEntity = this.authorRepository.create(createAuthorDto);
+    const savedAuthor: AuthorEntity =
+      await this.authorRepository.saveAuthor(author);
     return AuthorPresenter.fromEntity(savedAuthor);
   }
 
-  async getAuthors() {
-    const authors =
+  public async getAuthors(): Promise<AuthorPresenter[]> {
+    const authors: AuthorEntity[] =
       await this.authorRepository.findAuthorsWithWeightedRatings();
-    return authors.map((author) => AuthorPresenter.fromEntity(author));
+    return authors.map((author: AuthorEntity) =>
+      AuthorPresenter.fromEntity(author)
+    );
   }
 
-  async getAuthorById(id: string) {
-    const author = await this.authorRepository.findAuthorById(id);
+  public async getAuthorById(id: string): Promise<AuthorPresenter | null> {
+    const author: AuthorEntity | null =
+      await this.authorRepository.findAuthorById(id);
     if (!author) {
       return null;
     }
     return AuthorPresenter.fromEntity(author);
   }
 
-  async getDeletedAuthor() {
-    let deletedAuthor = await this.authorRepository.findDeletedAuthor();
+  public async getDeletedAuthor(): Promise<AuthorEntity> {
+    let deletedAuthor: AuthorEntity | null =
+      await this.authorRepository.findDeletedAuthor();
     if (!deletedAuthor) {
       deletedAuthor = this.authorRepository.create({
         id: 'deleted-author',
@@ -45,15 +53,16 @@ export class AuthorService {
     return deletedAuthor;
   }
 
-  async deleteAuthor(id: string) {
-    const author = await this.authorRepository.findAuthorById(id);
+  public async deleteAuthor(id: string): Promise<{ message: string }> {
+    const author: AuthorEntity | null =
+      await this.authorRepository.findAuthorById(id);
     if (!author) {
       throw new NotFoundException('Author not found');
     }
     if (author.name === 'Deleted author') {
       throw new BadRequestException('Cannot delete the "Deleted author".');
     }
-    const deletedAuthor = await this.getDeletedAuthor();
+    const deletedAuthor: AuthorEntity = await this.getDeletedAuthor();
     for (const book of author.books) {
       book.author = deletedAuthor;
       await this.authorRepository.saveBook(book);
@@ -66,13 +75,18 @@ export class AuthorService {
     };
   }
 
-  async updateAuthor(id: string, updateAuthorDto: UpdateAuthorDto) {
-    const author = await this.authorRepository.findAuthorById(id);
+  public async updateAuthor(
+    id: string,
+    updateAuthorDto: UpdateAuthorDto
+  ): Promise<AuthorPresenter> {
+    const author: AuthorEntity | null =
+      await this.authorRepository.findAuthorById(id);
     if (!author) {
       throw new NotFoundException('Author not found');
     }
     Object.assign(author, updateAuthorDto);
-    const updatedAuthor = await this.authorRepository.saveAuthor(author);
+    const updatedAuthor: AuthorEntity =
+      await this.authorRepository.saveAuthor(author);
     return AuthorPresenter.fromEntity(updatedAuthor);
   }
 }

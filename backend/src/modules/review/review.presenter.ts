@@ -1,4 +1,3 @@
-// backend/src/modules/review/review.presenter.ts
 import { ReviewEntity } from './review.entity';
 
 export class ReviewPresenter {
@@ -9,7 +8,7 @@ export class ReviewPresenter {
     public createdAt?: Date
   ) {}
 
-  static fromEntity(review: ReviewEntity): ReviewPresenter {
+  public static fromEntity(review: ReviewEntity): ReviewPresenter {
     return new ReviewPresenter(
       review.id,
       review.rating,

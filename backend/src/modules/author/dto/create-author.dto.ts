@@ -2,13 +2,13 @@ import { IsString, IsOptional } from 'class-validator';
 
 export class CreateAuthorDto {
   @IsString()
-  name: string;
+  public name: string;
 
   @IsOptional()
   @IsString()
-  bio?: string;
+  public bio?: string;
 
   @IsOptional()
   @IsString()
-  photo?: string;
+  public photo?: string;
 }

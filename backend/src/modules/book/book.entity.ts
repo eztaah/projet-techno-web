@@ -12,25 +12,25 @@ import { OneToMany } from 'typeorm';
 @Entity('books')
 export class BookEntity {
   @PrimaryColumn({ type: 'text' })
-  id: string;
+  public id: string;
 
   @Column({ type: 'text' })
-  title: string;
+  public title: string;
 
   @Column({ type: 'int' })
-  publicationYear: number;
+  public publicationYear: number;
 
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
-  price: number;
+  public price?: number;
 
   @ManyToOne(() => AuthorEntity, (author) => author.books, { eager: true })
-  author: AuthorEntity;
+  public author: AuthorEntity;
 
   @OneToMany(() => ReviewEntity, (review) => review.book)
-  reviews: ReviewEntity[];
+  public reviews: ReviewEntity[];
 
   @BeforeInsert()
-  setId() {
+  public setId(): void {
     this.id = `${this.title.toLowerCase().replace(/\s+/g, '-')}-by-${this.author.id.toLowerCase().replace(/\s+/g, '-')}`;
   }
 }

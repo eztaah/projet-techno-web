@@ -1,8 +1,8 @@
-// backend/src/modules/review/review.service.ts
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { ReviewRepository } from './review.repository';
 import { BookRepository } from '../book/book.repository';
 import { CreateReviewDto } from './dto/create-review.dto';
+import { ReviewEntity } from './review.entity';
 
 @Injectable()
 export class ReviewService {
@@ -11,13 +11,16 @@ export class ReviewService {
     private readonly bookRepository: BookRepository
   ) {}
 
-  async createReview(bookId: string, createReviewDto: CreateReviewDto) {
+  public async createReview(
+    bookId: string,
+    createReviewDto: CreateReviewDto
+  ): Promise<ReviewEntity> {
     const book = await this.bookRepository.findBookById(bookId);
     if (!book) {
       throw new NotFoundException('Book not found');
     }
 
-    const review = this.reviewRepository.create({
+    const review: ReviewEntity = this.reviewRepository.create({
       ...createReviewDto,
       book,
     });
@@ -25,7 +28,10 @@ export class ReviewService {
     return this.reviewRepository.saveReview(review);
   }
 
-  async getReviewsForBook(bookId: string, order: 'ASC' | 'DESC') {
+  public async getReviewsForBook(
+    bookId: string,
+    order: 'ASC' | 'DESC'
+  ): Promise<ReviewEntity[]> {
     return this.reviewRepository.findReviewsForBook(bookId, order);
   }
 }

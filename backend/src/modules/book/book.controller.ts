@@ -9,51 +9,56 @@ import {
 } from '@nestjs/common';
 import { BookService } from './book.service';
 import { CreateBookDto } from './dto/create-book.dto';
+import { BookPresenter } from './book.presenter';
 
 @Controller('books')
 export class BookController {
   constructor(private readonly bookService: BookService) {}
 
   @Post()
-  create(@Body() createBookDto: CreateBookDto) {
+  public async create(
+    @Body() createBookDto: CreateBookDto
+  ): Promise<BookPresenter> {
     console.log(`Request received to create a new book.`);
     console.log(`Book data: ${JSON.stringify(createBookDto, null, 2)}`);
-    
-    return this.bookService.createBook(createBookDto)
-      .then(book => {
+
+    return this.bookService
+      .createBook(createBookDto)
+      .then((book: BookPresenter) => {
         console.log(`Book created successfully with id: ${book.id}`);
         return book;
       })
-      .catch(error => {
+      .catch((error: Error) => {
         console.error(`Error creating book: ${error.message}`);
         throw error;
       });
   }
 
   @Get()
-  findAll() {
+  public async findAll(): Promise<BookPresenter[]> {
     console.log('Request received to fetch all books');
-    
-    return this.bookService.getBooks()
-      .then(books => {
+
+    return this.bookService
+      .getBooks()
+      .then((books: BookPresenter[]) => {
         console.log(`Fetched ${books.length} books.`);
-        
+
         if (books.length > 0) {
           console.log(`Sample book data: ${JSON.stringify(books[0], null, 2)}`);
         }
-        
+
         return books;
       })
-      .catch(error => {
+      .catch((error: Error) => {
         console.error(`Error fetching books: ${error.message}`);
         throw error;
       });
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string) {
+  public async findOne(@Param('id') id: string): Promise<BookPresenter> {
     console.log(`Request received to fetch book with id: "${id}"`);
-    
+
     try {
       const book = await this.bookService.getBookById(id);
       if (!book) {
@@ -69,9 +74,9 @@ export class BookController {
   }
 
   @Delete(':id')
-  async delete(@Param('id') id: string) {
+  public async delete(@Param('id') id: string): Promise<{ message: string }> {
     console.log(`Request received to delete book with id: "${id}"`);
-    
+
     try {
       const result = await this.bookService.deleteBook(id);
       console.log(`Book with id "${id}" deleted successfully.`);

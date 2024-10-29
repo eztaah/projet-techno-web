@@ -8,9 +8,7 @@ import { ReviewEntity } from '../review/review.entity';
 import { AuthorRepository } from './author.repository';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([AuthorEntity, BookEntity, ReviewEntity]), // Register ReviewEntity here
-  ],
+  imports: [TypeOrmModule.forFeature([AuthorEntity, BookEntity, ReviewEntity])],
   controllers: [AuthorController],
   providers: [AuthorService, AuthorRepository],
 })

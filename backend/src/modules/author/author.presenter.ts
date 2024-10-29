@@ -11,7 +11,7 @@ export class AuthorPresenter {
     public books?: { id: string; title: string; publicationYear: number }[]
   ) {}
 
-  static fromEntity(author: AuthorEntity): AuthorPresenter {
+  public static fromEntity(author: AuthorEntity): AuthorPresenter {
     return new AuthorPresenter(
       author.id,
       author.name,
