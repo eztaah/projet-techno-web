@@ -1,34 +1,33 @@
 'use client';
 import Link from 'next/link';
-import Button from './Button';
 
 export default function Navigation(): JSX.Element {
   return (
-    <nav className="bg-gray-800 p-4">
-      <ul className="flex space-x-4">
+    <nav className="bg-gray-800 p-4 shadow-lg">
+      <ul className="flex justify-center space-x-8">
         <li>
-          <Button
-            onClick={() => (window.location.href = '/')}
-            className="text-white"
+          <Link
+            href="/"
+            className="text-white px-4 py-2 rounded transition duration-200 ease-in-out hover:bg-gray-700 hover:text-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-600"
           >
             Home
-          </Button>
+          </Link>
         </li>
         <li>
-          <Button
-            onClick={() => (window.location.href = '/books')}
-            className="text-white"
+          <Link
+            href="/books"
+            className="text-white px-4 py-2 rounded transition duration-200 ease-in-out hover:bg-gray-700 hover:text-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-600"
           >
             Books
-          </Button>
+          </Link>
         </li>
         <li>
-          <Button
-            onClick={() => (window.location.href = '/authors')}
-            className="text-white"
+          <Link
+            href="/authors"
+            className="text-white px-4 py-2 rounded transition duration-200 ease-in-out hover:bg-gray-700 hover:text-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-600"
           >
             Authors
-          </Button>
+          </Link>
         </li>
       </ul>
     </nav>
