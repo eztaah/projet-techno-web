@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useAuthorProvider } from '../../providers/useAuthorProvider';
 import CreateAuthorModal from '../../components/CreateAuthorModal';
 import Breadcrumb from '../../components/Breadcrumb';
-import Button from '../../components/Button';
+import Button from '../../components/ButtonPrimary';
 import StarIcon from '@mui/icons-material/Star';
 
 export default function AuthorList(): JSX.Element {

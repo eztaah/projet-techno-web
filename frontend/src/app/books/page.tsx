@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useBookProvider } from '../../providers/useBookProvider';
-import Button from '../../components/Button';
+import Button from '../../components/ButtonPrimary';
 import Breadcrumb from '../../components/Breadcrumb';
 import CreateBookModal from '../../components/CreateBookModal';
 import StarIcon from '@mui/icons-material/Star';

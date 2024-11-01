@@ -8,13 +8,12 @@ export default function Breadcrumb(): JSX.Element {
   const breadcrumbs = pathSegments.map((segment, index) => {
     const href = '/' + pathSegments.slice(0, index + 1).join('/');
     const isLast = index === pathSegments.length - 1;
-    const decodedSegment = decodeURIComponent(segment);
-    const formattedSegment = decodedSegment.charAt(0) + decodedSegment.slice(1);
+    const formattedSegment = segment.charAt(0).toUpperCase() + segment.slice(1);
 
     return (
       <li key={href} className="inline-flex items-center">
         {!isLast ? (
-          <Link href={href} className="text-blue-500 hover:underline">
+          <Link href={href} className="text-blue-500 hover:text-blue-700 hover:underline">
             {formattedSegment}
           </Link>
         ) : (
