@@ -21,6 +21,7 @@ export class ReviewEntity {
   @CreateDateColumn()
   public createdAt: Date;
 
-  @ManyToOne(() => BookEntity, (book) => book.reviews)
+  @ManyToOne(() => BookEntity, (book) => book.reviews, { onDelete: 'CASCADE' })
   public book: BookEntity;
+  
 }

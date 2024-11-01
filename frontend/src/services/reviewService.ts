@@ -1,5 +1,4 @@
-// frontend/src/services/reviewService.ts
-
+// reviewService.ts
 import { api } from './api';
 
 export async function fetchReviews(bookId: string, order: 'ASC' | 'DESC') {
@@ -15,4 +14,9 @@ export async function createReview(
 ) {
   const response = await api.post(`/books/${bookId}/reviews`, review);
   return response.data;
+}
+
+// Supprime toutes les critiques associées à un livre
+export async function deleteReviewsByBookId(bookId: string) {
+  await api.delete(`/books/${bookId}/reviews`);
 }

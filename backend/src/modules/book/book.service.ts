@@ -1,6 +1,7 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { BookRepository } from './book.repository';
 import { CreateBookDto } from './dto/create-book.dto';
+import { UpdateBookDto } from './dto/update-book.dto';
 import { BookPresenter } from './book.presenter';
 import { BookEntity } from './book.entity';
 import { AuthorEntity } from '../author/author.entity';
@@ -9,11 +10,8 @@ import { AuthorEntity } from '../author/author.entity';
 export class BookService {
   constructor(private readonly bookRepository: BookRepository) {}
 
-  public async createBook(
-    createBookDto: CreateBookDto
-  ): Promise<BookPresenter> {
-    const author: AuthorEntity | null =
-      await this.bookRepository.findAuthorById(createBookDto.authorId);
+  public async createBook(createBookDto: CreateBookDto): Promise<BookPresenter> {
+    const author: AuthorEntity | null = await this.bookRepository.findAuthorById(createBookDto.authorId);
     if (!author) {
       throw new NotFoundException('Author not found');
     }
@@ -30,8 +28,7 @@ export class BookService {
   }
 
   public async getBooks(): Promise<BookPresenter[]> {
-    const books: BookEntity[] =
-      await this.bookRepository.findBooksWithRatings();
+    const books: BookEntity[] = await this.bookRepository.findBooksWithRatings();
     return books.map((book: BookEntity) => BookPresenter.fromEntity(book));
   }
 
@@ -44,7 +41,42 @@ export class BookService {
   }
 
   public async deleteBook(id: string): Promise<{ message: string }> {
-    await this.bookRepository.deleteBook(id);
-    return { message: 'Book deleted successfully' };
+    try {
+      await this.bookRepository.deleteBook(id);
+      return { message: 'Book deleted successfully' };
+    } catch (error) {
+      console.error("Error deleting book with ID:", id, error);
+      throw new InternalServerErrorException("An error occurred while deleting the book.");
+    }
+  }
+
+  // Implémentation de updateBook
+  public async updateBook(id: string, updateData: UpdateBookDto): Promise<BookPresenter> {
+    const book: BookEntity | null = await this.bookRepository.findBookById(id);
+    if (!book) {
+      throw new NotFoundException('Book not found');
+    }
+
+    // Si l'ID de l'auteur est fourni et différent, vérifiez que l'auteur existe
+    if (updateData.authorId && updateData.authorId !== book.author.id) {
+      const author: AuthorEntity | null = await this.bookRepository.findAuthorById(updateData.authorId);
+      if (!author) {
+        throw new NotFoundException('Author not found');
+      }
+      book.author = author;
+    }
+
+    // Mettre à jour les autres champs si des valeurs sont fournies
+    if (updateData.title) book.title = updateData.title;
+    if (updateData.publicationYear) book.publicationYear = updateData.publicationYear;
+    if (updateData.price !== undefined) book.price = updateData.price;
+
+    try {
+      const updatedBook: BookEntity = await this.bookRepository.saveBook(book);
+      return BookPresenter.fromEntity(updatedBook);
+    } catch (error) {
+      console.error("Error updating book with ID:", id, error);
+      throw new InternalServerErrorException("An error occurred while updating the book.");
+    }
   }
 }

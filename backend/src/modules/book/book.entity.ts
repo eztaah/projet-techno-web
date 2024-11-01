@@ -26,7 +26,7 @@ export class BookEntity {
   @ManyToOne(() => AuthorEntity, (author) => author.books, { eager: true })
   public author: AuthorEntity;
 
-  @OneToMany(() => ReviewEntity, (review) => review.book)
+  @OneToMany(() => ReviewEntity, (review) => review.book, { cascade: true, onDelete: 'CASCADE' })
   public reviews: ReviewEntity[];
 
   @BeforeInsert()
