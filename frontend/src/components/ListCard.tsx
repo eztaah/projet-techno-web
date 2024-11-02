@@ -48,7 +48,7 @@ export default function ListCard({
           src={authorImage}
           alt={`${authorName} author`}
           className={`${
-            viewMode === 'grid' ? 'w-full h-32 mb-4' : 'w-20 h-20'
+            viewMode === 'grid' ? 'hidden' : 'w-20 h-20'
           } rounded-full object-cover shadow-md border-2 border-gray-200 transition-transform duration-300 transform hover:scale-105`}
         />
       )}
