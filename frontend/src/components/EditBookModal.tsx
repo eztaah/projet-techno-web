@@ -34,10 +34,10 @@ export default function EditBookModal({
 }: EditBookModalProps): JSX.Element | null {
   const [title, setTitle] = useState('');
   const [publicationYear, setPublicationYear] = useState<number | ''>(''); 
-  const [authorId, setAuthorId] = useState(''); 
+  const [authorId, setAuthorId] = useState('');
   const [price, setPrice] = useState<number | ''>('');
+  const [isSelectingAuthor, setIsSelectingAuthor] = useState(false);
 
-  // Met à jour les champs avec les données du livre quand le modal s'ouvre
   useEffect(() => {
     if (isOpen) {
       setTitle(bookData.title || '');
@@ -76,29 +76,44 @@ export default function EditBookModal({
           onChange={(e) => setPublicationYear(e.target.value ? Number(e.target.value) : '')}
           required
         />
+
+        {/* Section pour sélectionner un auteur */}
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-medium mb-1">Author *</label>
-<select
-  value={authorId} // ID de l'auteur par défaut
-  onChange={(e) => setAuthorId(e.target.value)}
-  required
-  className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
->
-  
-  {authors.map((author) => (
-    <option key={author.id} value={author.id}>
-      {author.name}
-    </option>
-  ))}
-</select>
-
+          {isSelectingAuthor ? (
+            <select
+              value={authorId}
+              onChange={(e) => setAuthorId(e.target.value)}
+              required
+              className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="" disabled>
+                Select an author
+              </option>
+              {authors.map((author) => (
+                <option key={author.id} value={author.id}>
+                  {author.name}
+                </option>
+              ))}
+            </select>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setIsSelectingAuthor(true)}
+              className="p-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+            >
+              Change Author
+            </button>
+          )}
         </div>
+
         <InputField
           label="Price (optional)"
           type="number"
           value={price}
           onChange={(e) => setPrice(e.target.value ? Number(e.target.value) : '')}
         />
+        
         <div className="flex justify-end space-x-2">
           <ButtonSecondary onClick={onClose}>Cancel</ButtonSecondary>
           <ButtonPrimary type="submit">Save Changes</ButtonPrimary>
