@@ -13,7 +13,7 @@ export default function CreateAuthorModal({
 }: CreateAuthorModalProps): JSX.Element | null {
   const [name, setName] = useState<string>('');
   const [bio, setBio] = useState<string>('');
-  const [photo, setPhoto] = useState<string>('');
+  const [photo, setPhoto] = useState<string>('https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png');
 
   const handleSubmit = (): void => {
     if (!name) {

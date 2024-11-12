@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface EditAuthorModalProps {
   isOpen: boolean;
@@ -8,29 +8,53 @@ interface EditAuthorModalProps {
     bio?: string;
     photo?: string;
   }) => void;
-  author: {
+  authorData: {
+    id: string;
     name: string;
     bio?: string;
     photo?: string;
-  };
+  } | null;
 }
 
 export default function EditAuthorModal({
   isOpen,
   onClose,
   onSubmit,
-  author,
+  authorData,
 }: EditAuthorModalProps): JSX.Element | null {
-  const [name, setName] = useState<string>(author.name);
-  const [bio, setBio] = useState<string>(author.bio || '');
-  const [photo, setPhoto] = useState<string>(author.photo || '');
+  const [name, setName] = useState<string>('');
+  const [bio, setBio] = useState<string>('');
+  const [photo, setPhoto] = useState<string>('');
+  const [photoError, setPhotoError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (authorData) {
+      setName(authorData.name);
+      setBio(authorData.bio || 'Cette personne n’a pas encore de biographie.');
+      setPhoto(authorData.photo || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png');
+    }
+  }, [authorData]);
+
+  const validatePhotoURL = (url: string): boolean => {
+    try {
+      new URL(url);
+      return true;
+    } catch {
+      return false;
+    }
+  };
 
   const handleSubmit = (): void => {
+    if (photo && !validatePhotoURL(photo)) {
+      setPhotoError('Invalid URL for photo.');
+      return;
+    }
+    setPhotoError(null);
     onSubmit({ name, bio, photo });
     onClose();
   };
 
-  if (!isOpen) return null;
+  if (!isOpen || !authorData) return null;
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
@@ -45,35 +69,29 @@ export default function EditAuthorModal({
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="e.g., J.K. Rowling"
             required
             className="w-full p-2 border rounded"
           />
         </div>
 
         <div className="mb-4">
-          <label className="block text-gray-700">
-            Biography <span className="text-gray-500">(optional)</span>
-          </label>
+          <label className="block text-gray-700">Biography</label>
           <textarea
             value={bio}
             onChange={(e) => setBio(e.target.value)}
-            placeholder="Short biography of the author"
             className="w-full p-2 border rounded"
           />
         </div>
 
         <div className="mb-4">
-          <label className="block text-gray-700">
-            Photo URL <span className="text-gray-500">(optional)</span>
-          </label>
+          <label className="block text-gray-700">Photo URL</label>
           <input
             type="url"
             value={photo}
             onChange={(e) => setPhoto(e.target.value)}
-            placeholder="https://example.com/photo.jpg"
             className="w-full p-2 border rounded"
           />
+          {photoError && <p className="text-red-500 text-sm">{photoError}</p>}
         </div>
 
         <div className="flex justify-end">

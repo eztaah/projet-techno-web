@@ -31,3 +31,4 @@ export async function deleteAuthor(id: string) {
   const response = await api.delete(`/authors/${id}`);
   return response.data;
 }
+
