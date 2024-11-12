@@ -14,7 +14,8 @@ import GridViewIcon from '@mui/icons-material/GridView';
 import ViewListIcon from '@mui/icons-material/ViewList';
 import AddIcon from '@mui/icons-material/Add';
 import Alert from '../../components/Alert';
-import { fetchAuthors, updateAuthor } from '../../services/authorService';
+import { createAuthor, fetchAuthors, updateAuthor } from '../../services/authorService';
+import { create } from 'domain';
 
 type SortOption = 'name-asc' | 'name-desc' | 'books-asc' | 'books-desc';
 
@@ -45,7 +46,17 @@ export default function AuthorList(): JSX.Element {
       setLoading(false);
     }
   };
-
+ const createAuthor = async (newAuthor: { name: string; bio?: string; photo?: string }) => {
+    try {
+      await addAuthor(newAuthor);
+      showAlert('Author added successfully!', 'success');
+      setModalOpen(false);
+      loadAuthors();
+    } catch (error) {
+      console.error('Failed to create author:', error.response?.data || error);
+      showAlert('Failed to create author. Please check the provided data.', 'error');
+    }
+  }
   const showAlert = (message: string, type: 'success' | 'error' | 'warning') => {
     setAlert({ message, type });
     setTimeout(() => setAlert(null), 3000);
@@ -178,9 +189,7 @@ export default function AuthorList(): JSX.Element {
         isOpen={isModalOpen}
         onClose={() => setModalOpen(false)}
         onSubmit={(newAuthor) => {
-          addAuthor(newAuthor);
-          showAlert('Author created successfully!', 'success');
-          loadAuthors();
+          createAuthor(newAuthor);
         }}
       />
       {authorToEdit && (
