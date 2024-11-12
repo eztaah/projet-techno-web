@@ -12,6 +12,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import PersonIcon from '@mui/icons-material/Person';
 import Alert from '../../../components/Alert';
 import Link from 'next/link';
+import { useAuthorProvider } from '../../../providers/useAuthorProvider';
 
 interface Author {
   id: string;
@@ -44,7 +45,7 @@ export default function BookDetail(): JSX.Element {
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
   const [alert, setAlert] = useState<{ message: string; type: 'success' | 'error' | 'warning' } | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-
+  const { authors } = useAuthorProvider();
   useEffect(() => {
     if (id) {
       fetchBookById(id)
@@ -54,6 +55,10 @@ export default function BookDetail(): JSX.Element {
     }
   }, [id]);
 
+  const getAuthorImage = (authorId: string) => {
+    const author = authors.find((author) => author.id === authorId);
+    return author ? author.photo : null; // Assure la gestion des auteurs sans photo
+  };
   const loadReviews = async (): Promise<void> => {
     try {
       const fetchedReviews = await fetchReviews(id);
@@ -107,17 +112,12 @@ export default function BookDetail(): JSX.Element {
       <Breadcrumb />
       <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-2xl mx-auto animate-fade-in">
         <div className="flex items-center space-x-6">
-          {book.author.photo ? (
             <img
-              src={book.author.photo}
+              src={getAuthorImage(book.author.id) || ''}
+                
               alt={book.author.name}
               className="w-24 h-24 rounded-full object-cover shadow-lg border-2 border-gray-300"
             />
-          ) : (
-            <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center shadow-lg border-2 border-gray-300">
-              <PersonIcon className="text-gray-400 text-4xl" />
-            </div>
-          )}
           <div>
             <h1 className="text-3xl font-bold text-gray-800">{book.title}</h1>
             <Link href={`/authors/${book.author.id}`} className="text-blue-500 hover:underline">
